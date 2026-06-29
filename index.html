@@ -636,8 +636,6 @@ function buildSommerChart(stationKey) {
   if (!dwdData) return null;
   const { years, counts } = dwdData;
 
-  // Hinweis: In der aktuellen JSON ist das Feld als "sommertage" abgelegt.
-  // Definition sollte im Fetch-Skript konsistent gesetzt werden (z.B. Tmax >= 25 °C).
   const currentYear = new Date().getFullYear();
   const colors = years.map(y => y === currentYear ? '#f29100' : '#f7c870');
   const borders = years.map(y => y === currentYear ? '#c07000' : '#e0a840');
@@ -648,7 +646,7 @@ function buildSommerChart(stationKey) {
     data: {
       labels: years.map(String),
       datasets: [{
-        label: 'Sommertage (≥30°C)',
+        label: 'Sommertage (≥25 °C)',
         data: counts,
         backgroundColor: colors,
         borderColor: borders,
@@ -662,37 +660,24 @@ function buildSommerChart(stationKey) {
       plugins: {
         legend: { display: false },
         tooltip: {
-        callbacks: {
-          title: (items) => items[0].label,
-          label: (c) => {
-            const nameMap = {
-              'Tageshöchsttemperatur': 'Linie: Tageshöchsttemperatur',
-              'Mittelwert': 'Gestrichelte Linie: Mittelwert',
-              'Band oben': 'Grauer Bereich oberhalb der gestrichelten Linie: Obergrenze Normalbereich',
-              'Band unten': 'Grauer Bereich unterhalb der gestrichelten Linie: Untergrenze Normalbereich',
-              '30-Tage-Niederschlag': 'Linie: Niederschlag (30 Tage)'
-            };
-            const prefix = nameMap[c.dataset.label] || c.dataset.label;
-            if (c.parsed.y == null) return null;
-            return `${prefix}: ${c.parsed.y}`;
+          callbacks: {
+            title: (items) => items[0].label,
+            label: (c) => `${c.parsed.y} Sommertage`,
           }
+        }
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: { font: { family: "'Inter',sans-serif", size: 10 }, color: '#888', maxTicksLimit: 10, maxRotation: 0 },
+          border: { display: false },
         },
-        // alle Linien/Baender anzeigen
-        filter: () => true,
-      },
-    },
-    scales: {
-      x: {
-        grid: { display: false },
-        ticks: { font: { family: "'Inter',sans-serif", size: 11 }, color: '#888', maxTicksLimit: 8 },
-        border: { display: false },
-      },
-      y: {
-        min: yMin,
-        max: yMax,
-        grid: { color: 'rgba(0,0,0,0.06)' },
-        ticks: { font: { family: "'Inter',sans-serif", size: 11 }, color: '#888', callback: tickFn },
-        border: { display: false },
+        y: {
+          min: 0,
+          grid: { color: 'rgba(0,0,0,0.06)' },
+          ticks: { font: { family: "'Inter',sans-serif", size: 11 }, color: '#888', callback: (v) => v + ' Tage' },
+          border: { display: false },
+        }
       }
     }
   };
