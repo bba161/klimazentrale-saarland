@@ -1,6 +1,6 @@
 {
   "meta": {
-    "erstellt_am": "2026-06-29T13:30:14Z",
+    "erstellt_am": "2026-06-29T20:55:42Z",
     "quelle": "Deutscher Wetterdienst (DWD) Open Data",
     "url": "https://opendata.dwd.de/",
     "stationen": {
@@ -49732,11 +49732,11 @@
         },
         {
           "jahr": 2025,
-          "anzahl": 11
+          "anzahl": 51
         },
         {
           "jahr": 2026,
-          "anzahl": 12
+          "anzahl": 22
         }
       ],
       "regen_tage": [
@@ -50134,11 +50134,11 @@
         },
         {
           "jahr": 2025,
-          "anzahl": 20
+          "anzahl": 62
         },
         {
           "jahr": 2026,
-          "anzahl": 19
+          "anzahl": 27
         }
       ],
       "regen_tage": [
@@ -50536,11 +50536,11 @@
         },
         {
           "jahr": 2025,
-          "anzahl": 12
+          "anzahl": 45
         },
         {
           "jahr": 2026,
-          "anzahl": 12
+          "anzahl": 22
         }
       ],
       "regen_tage": [
@@ -50940,11 +50940,11 @@
         },
         {
           "jahr": 2025,
-          "anzahl": 17
+          "anzahl": 60
         },
         {
           "jahr": 2026,
-          "anzahl": 18
+          "anzahl": 25
         }
       ],
       "regen_tage": [
@@ -51343,11 +51343,11 @@
         },
         {
           "jahr": 2025,
-          "anzahl": 16
+          "anzahl": 59
         },
         {
           "jahr": 2026,
-          "anzahl": 15
+          "anzahl": 24
         }
       ],
       "regen_tage": [
@@ -51746,11 +51746,11 @@
         },
         {
           "jahr": 2025,
-          "anzahl": 11
+          "anzahl": 37
         },
         {
           "jahr": 2026,
-          "anzahl": 12
+          "anzahl": 22
         }
       ],
       "regen_tage": [
@@ -52148,11 +52148,11 @@
         },
         {
           "jahr": 2025,
-          "anzahl": 12
+          "anzahl": 53
         },
         {
           "jahr": 2026,
-          "anzahl": 17
+          "anzahl": 22
         }
       ],
       "regen_tage": [
