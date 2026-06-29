@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Klimazentrale Saarland</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.6/dist/chart.umd.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --heat:   #f85a54;
+    --rain:   #004d8b;
+    --orange: #f29100;
+    --heat-dim:   #fbc4c2;
+    --rain-dim:   #6698c4;
+    --orange-dim: #f7c870;
+    --cool:   #2471a3;
+    --normal-green: #2e7d32;
+    --border: #e0ddd8;
+    --bg: #ffffff;
+    --bg-muted: #f5f4f1;
+    --text: #1a1a1a;
+    --text-muted: #666;
+    --accent-left: #c9a84c;
+    --serif: 'Source Serif 4', Georgia, serif;
+    --sans:  'Source Sans 3', Arial, sans-serif;
+  }
+
+  body { font-family: var(--sans); background: var(--bg); color: var(--text); font-size: 16px; line-height: 1.5; }
+
+  /* ── HEADER ── */
+  .page-header { border-bottom: 2px solid var(--heat); padding: 18px 0 14px; text-align: center; margin-bottom: 32px; }
+  .page-header .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--heat); margin-bottom: 4px; }
+  .page-header h1 { font-family: var(--serif); font-size: clamp(22px, 4vw, 32px); font-weight: 700; letter-spacing: -0.01em; }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 900px; margin: 0 auto; padding: 0 20px 60px; }
+
+  /* ── PLZ SEARCH ── */
+  .plz-field { display: flex; align-items: center; gap: 10px; }
+  #plz-select {
+    font-family: var(--sans); font-size: 15px;
+    border: none; border-bottom: 1.5px solid #999;
+    background: transparent; padding: 4px 24px 4px 4px;
+    cursor: pointer; appearance: none; outline: none;
+    color: var(--text); min-width: 200px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23333' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 4px center;
+  }
+  #plz-select:focus { border-bottom-color: var(--heat); }
+  .station-dist { font-size: 13px; color: var(--text-muted); }
+
+  /* ── MAIN CARD ── */
+  .main-card { border: 1px solid var(--border); border-radius: 2px; overflow: hidden; display: grid; grid-template-columns: 1fr 1.15fr; }
+
+  /* ── LEFT PANEL ── */
+  .left-panel { border-right: 1px solid var(--border); }
+
+  .metric-block {
+    padding: 22px 22px 22px 26px;
+    border-left: 4px solid transparent;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .metric-block.active  { border-left-color: var(--accent-left); background: var(--bg); }
+  .metric-block.muted   { background: var(--bg-muted); }
+  .metric-block:hover:not(.active) { background: #eeedea; }
+  .metric-block + .metric-block { border-top: 1px solid var(--border); }
+
+  .metric-header { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+  .metric-icon { font-size: 24px; line-height: 1; flex-shrink: 0; }
+  .metric-block.muted .metric-icon { filter: grayscale(1) opacity(0.5); }
+  .metric-title { font-weight: 700; font-size: 15px; }
+  .metric-block.muted .metric-title { color: #888; }
+  .metric-body { font-size: 14px; color: #444; line-height: 1.6; padding-left: 36px; }
+  .metric-block.muted .metric-body { color: #888; }
+
+  .val-warm   { color: var(--heat);   font-weight: 600; }
+  .val-cool   { color: var(--cool);   font-weight: 600; }
+  .val-normal { color: var(--normal-green); font-weight: 600; }
+  .val-dry    { color: var(--orange); font-weight: 600; }
+  .val-wet    { color: var(--rain);   font-weight: 600; }
+  .val-orange { color: var(--orange); font-weight: 600; }
+
+  /* ── RIGHT PANEL ── */
+  .right-panel { padding: 22px 22px 18px; display: flex; flex-direction: column; }
+  .chart-headline { font-family: var(--serif); font-size: 16px; font-weight: 600; line-height: 1.35; margin-bottom: 6px; }
+  .chart-headline .hl { color: white; padding: 1px 5px; border-radius: 2px; font-style: normal; }
+  .hl-heat   { background: var(--heat); }
+  .hl-rain   { background: var(--rain); }
+  .hl-orange { background: var(--orange); }
+  .hl-normal { background: var(--normal-green); }
+  .hl-cool   { background: var(--cool); }
+
+  .chart-desc { font-size: 12.5px; color: var(--text-muted); margin-bottom: 10px; line-height: 1.5; }
+
+  /* ── PERIOD TOGGLE ── */
+  .period-toggle { display: flex; gap: 0; margin-bottom: 12px; }
+  .period-btn {
+    font-family: var(--sans); font-size: 12px; font-weight: 600;
+    padding: 4px 11px; border: 1.5px solid var(--text);
+    background: transparent; cursor: pointer; letter-spacing: 0.02em;
+    transition: background 0.15s, color 0.15s;
+  }
+  .period-btn:first-child { border-radius: 2px 0 0 2px; }
+  .period-btn:last-child  { border-radius: 0 2px 2px 0; border-left: none; }
+  .period-btn.active { background: var(--text); color: white; }
+
+  .chart-wrap { flex: 1; min-height: 230px; position: relative; }
+
+  /* ── FOOTER ── */
+  .footer-btns { display: flex; gap: 12px; justify-content: center; margin-top: 28px; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--orange); color: white; font-family: var(--sans);
+    font-weight: 700; font-size: 14px; padding: 12px 28px;
+    border: none; border-radius: 2px; cursor: pointer;
+  }
+  .btn-secondary {
+    background: transparent; color: var(--orange); font-family: var(--sans);
+    font-weight: 700; font-size: 14px; padding: 12px 28px;
+    border: 1.5px solid var(--orange); border-radius: 2px; cursor: pointer;
+  }
+  .footer-note { margin-top: 18px; font-size: 12px; color: #bbb; text-align: center; }
+  .footer-note a { color: #bbb; }
+
+  @media (max-width: 640px) {
+    .main-card { grid-template-columns: 1fr; }
+    .left-panel { border-right: none; border-bottom: 1px solid var(--border); }
+  }
+</style>
+</head>
+<body>
+
+<header class="page-header">
+  <div class="eyebrow">Rheinische Post Mediengruppe · Datenjournalismus</div>
+  <h1>Ist das Wetter heute normal?</h1>
+</header>
+
+<main class="container">
+
+  <div class="station-row">
+    <div class="plz-field">
+      <label for="plz-select"><strong>Ihre Postleitzahl:</strong>&nbsp;</label>
+      <select id="plz-select" onchange="applyPLZ(this.value)">
+        <option value="66111">66111 – Saarbrücken</option>
+        <option value="66113">66113 – Saarbrücken</option>
+        <option value="66115">66115 – Saarbrücken</option>
+        <option value="66117">66117 – Saarbrücken</option>
+        <option value="66119">66119 – Saarbrücken</option>
+        <option value="66121">66121 – Saarbrücken</option>
+        <option value="66123">66123 – Saarbrücken</option>
+        <option value="66125">66125 – Saarbrücken (Dudweiler)</option>
+        <option value="66126">66126 – Saarbrücken (Altenkessel)</option>
+        <option value="66127">66127 – Saarbrücken (Klarenthal)</option>
+        <option value="66128">66128 – Saarbrücken (Gersweiler)</option>
+        <option value="66129">66129 – Saarbrücken (Bischmisheim)</option>
+        <option value="66130">66130 – Saarbrücken (Brebach)</option>
+        <option value="66131">66131 – Saarbrücken (Güdingen)</option>
+        <option value="66132">66132 – Saarbrücken (Bübingen)</option>
+        <option value="66133">66133 – Saarbrücken (Scheidt)</option>
+        <option value="66265">66265 – Heusweiler</option>
+        <option value="66271">66271 – Kleinblittersdorf</option>
+        <option value="66280">66280 – Sulzbach/Saar</option>
+        <option value="66287">66287 – Quierschied</option>
+        <option value="66292">66292 – Riegelsberg</option>
+        <option value="66299">66299 – Friedrichsthal</option>
+        <option value="66333">66333 – Völklingen</option>
+        <option value="66346">66346 – Püttlingen</option>
+        <option value="66352">66352 – Großrosseln</option>
+        <option value="66359">66359 – Bous</option>
+        <option value="66386">66386 – St. Ingbert</option>
+        <option value="66399">66399 – Mandelbachtal</option>
+        <option value="66424">66424 – Homburg</option>
+        <option value="66440">66440 – Blieskastel</option>
+        <option value="66450">66450 – Bexbach</option>
+        <option value="66453">66453 – Gersheim</option>
+        <option value="66459">66459 – Kirkel</option>
+        <option value="66538">66538 – Neunkirchen</option>
+        <option value="66539">66539 – Neunkirchen</option>
+        <option value="66540">66540 – Neunkirchen</option>
+        <option value="66557">66557 – Illingen</option>
+        <option value="66564">66564 – Ottweiler</option>
+        <option value="66571">66571 – Eppelborn</option>
+        <option value="66578">66578 – Schiffweiler</option>
+        <option value="66583">66583 – Spiesen-Elversberg</option>
+        <option value="66589">66589 – Merchweiler</option>
+        <option value="66606">66606 – St. Wendel</option>
+        <option value="66620">66620 – Nonnweiler</option>
+        <option value="66625">66625 – Nohfelden</option>
+        <option value="66629">66629 – Freisen</option>
+        <option value="66636">66636 – Tholey</option>
+        <option value="66640">66640 – Namborn</option>
+        <option value="66646">66646 – Marpingen</option>
+        <option value="66649">66649 – Oberthal</option>
+        <option value="66663">66663 – Merzig</option>
+        <option value="66679">66679 – Losheim am See</option>
+        <option value="66687">66687 – Wadern</option>
+        <option value="66693">66693 – Mettlach</option>
+        <option value="66701">66701 – Beckingen</option>
+        <option value="66706">66706 – Perl</option>
+        <option value="66709">66709 – Weiskirchen</option>
+        <option value="66740">66740 – Saarlouis</option>
+        <option value="66763">66763 – Dillingen/Saar</option>
+        <option value="66773">66773 – Schwalbach</option>
+        <option value="66780">66780 – Rehlingen-Siersburg</option>
+        <option value="66787">66787 – Wadgassen</option>
+        <option value="66793">66793 – Saarwellingen</option>
+        <option value="66798">66798 – Wallerfangen</option>
+        <option value="66802">66802 – Überherrn</option>
+        <option value="66806">66806 – Ensdorf</option>
+        <option value="66809">66809 – Nalbach</option>
+        <option value="66822">66822 – Lebach</option>
+        <option value="66839">66839 – Schmelz</option>
+      </select>
+    </div>
+    <div class="station-display">
+      <span id="station-dist-hint"></span>
+      Wetterstation: <strong id="station-name-display">–</strong>
+      &nbsp;·&nbsp; DWD-ID: <strong id="station-id-display">–</strong>
+    </div>
+  </div>
+  <p class="station-hint" id="station-hint-text">
+    Geben Sie Ihre PLZ ein — wir finden automatisch die nächste DWD-Wetterstation im Saarland.
+  </p>
+
+  <div class="main-card">
+
+    <!-- LEFT: metric blocks -->
+    <div class="left-panel">
+
+      <div class="metric-block active" id="block-temp" onclick="selectMetric('temp')">
+        <div class="metric-header">
+          <div class="metric-icon">🌡</div>
+          <div class="metric-title">Temperatur</div>
+        </div>
+        <div class="metric-body">
+          Tageshöchstwert heute: <span class="val-warm" id="temp-max">–</span>.
+          Das ist <span class="val-warm" id="temp-verdict">–</span>.
+        </div>
+      </div>
+
+      <div class="metric-block muted" id="block-regen" onclick="selectMetric('regen')">
+        <div class="metric-header">
+          <div class="metric-icon">🌧</div>
+          <div class="metric-title">Regen</div>
+        </div>
+        <div class="metric-body">
+          Regen in den letzten 30 Tagen: <span class="val-dry" id="regen-val">–</span>.
+          Das ist <span class="val-dry" id="regen-verdict">–</span>.
+        </div>
+      </div>
+
+      <div class="metric-block muted" id="block-sommer" onclick="selectMetric('sommer')">
+        <div class="metric-header">
+          <div class="metric-icon">☀️</div>
+          <div class="metric-title">Sommertage</div>
+        </div>
+        <div class="metric-body">
+          <span class="val-orange">Sommertage</span> ab 30 °C:
+          <span class="val-orange" id="sommer-val">–</span> seit März.
+          In welchem Monat diese Tage auftreten, schwankt von Jahr zu Jahr,
+          seit 1961 werden es aber <span class="val-orange" id="sommer-trend">immer mehr</span>.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT: chart area -->
+    <div class="right-panel">
+      <div class="chart-headline" id="chart-headline">–</div>
+      <p class="chart-desc" id="chart-desc">–</p>
+      <div class="period-toggle" id="period-toggle">
+        <button class="period-btn active" id="btn-6190" onclick="setPeriod('6190')">1961–1990</button>
+        <button class="period-btn"        id="btn-9120" onclick="setPeriod('9120')">1991–2020</button>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="mainChart"></canvas>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer-btns">
+    <button class="btn-primary">Alle Daten für Ihre Station</button>
+    <button class="btn-secondary">Quellen und Methodik</button>
+  </div>
+  <p class="footer-note">
+    Datenquelle: <a href="https://opendata.dwd.de/" target="_blank">Deutscher Wetterdienst (DWD) Open Data</a> ·
+    Prototyp mit simulierten Musterdaten. Echte DWD-Stundenwerte werden nach Datenbankaufbau eingespeist.
+  </p>
+
+</main>
+
+<script>
+// ─── STATIONS (mit Koordinaten für Distanzberechnung) ────────────
+const STATIONS = {
+  ensheim:     { name: "Saarbrücken-Ensheim",     id: "04336", bias: 1.8,  lat: 49.214, lon: 7.112 },
+  burbach:     { name: "Saarbrücken-Burbach",      id: "06217", bias: 1.5,  lat: 49.232, lon: 6.960 },
+  berus:       { name: "Berus",                    id: "00460", bias: 0.8,  lat: 49.264, lon: 6.687 },
+  homburg:     { name: "Homburg",                  id: "02331", bias: 2.1,  lat: 49.326, lon: 7.338 },
+  merzig:      { name: "Merzig",                   id: "03263", bias: 1.2,  lat: 49.445, lon: 6.638 },
+  neunkirchen: { name: "Neunkirchen-Wellesweiler", id: "03545", bias: 0.9,  lat: 49.348, lon: 7.179 },
+  nohfelden:   { name: "Nohfelden-Gonnesweiler",   id: "03625", bias: -0.5, lat: 49.577, lon: 7.147 },
+  perl:        { name: "Perl-Nennig",              id: "03904", bias: 1.6,  lat: 49.470, lon: 6.367 },
+  schmelz:     { name: "Schmelz-Hüttersdorf",      id: "04490", bias: 0.4,  lat: 49.436, lon: 6.849 },
+  tholey:      { name: "Tholey",                   id: "05029", bias: -0.3, lat: 49.484, lon: 7.034 },
+  weiskirchen: { name: "Weiskirchen",              id: "05433", bias: -0.8, lat: 49.551, lon: 6.818 },
+};
+
+// ─── ALLE SAARLAND-PLZs (PLZ → Ort + Koordinaten) ───────────────
+// Koordinaten: Zentrum des jeweiligen Ortes (approximiert)
+const PLZ_DATA = [
+  { plz:"66111", ort:"Saarbrücken",          lat:49.235, lon:6.996 },
+  { plz:"66113", ort:"Saarbrücken",          lat:49.232, lon:6.990 },
+  { plz:"66115", ort:"Saarbrücken",          lat:49.244, lon:6.975 },
+  { plz:"66117", ort:"Saarbrücken",          lat:49.241, lon:6.982 },
+  { plz:"66119", ort:"Saarbrücken",          lat:49.222, lon:6.999 },
+  { plz:"66121", ort:"Saarbrücken",          lat:49.228, lon:7.020 },
+  { plz:"66123", ort:"Saarbrücken",          lat:49.233, lon:7.003 },
+  { plz:"66125", ort:"Saarbrücken (Dudweiler)", lat:49.268, lon:7.044 },
+  { plz:"66126", ort:"Saarbrücken (Altenkessel)", lat:49.253, lon:6.946 },
+  { plz:"66127", ort:"Saarbrücken (Klarenthal)", lat:49.251, lon:6.938 },
+  { plz:"66128", ort:"Saarbrücken (Gersweiler)", lat:49.258, lon:6.929 },
+  { plz:"66129", ort:"Saarbrücken (Bischmisheim)", lat:49.204, lon:7.047 },
+  { plz:"66130", ort:"Saarbrücken (Brebach)", lat:49.193, lon:7.045 },
+  { plz:"66131", ort:"Saarbrücken (Güdingen)", lat:49.195, lon:7.063 },
+  { plz:"66132", ort:"Saarbrücken (Bübingen)", lat:49.174, lon:7.070 },
+  { plz:"66133", ort:"Saarbrücken (Scheidt)", lat:49.185, lon:7.095 },
+  { plz:"66265", ort:"Heusweiler",           lat:49.337, lon:6.918 },
+  { plz:"66271", ort:"Kleinblittersdorf",    lat:49.154, lon:7.041 },
+  { plz:"66280", ort:"Sulzbach/Saar",        lat:49.298, lon:7.059 },
+  { plz:"66287", ort:"Quierschied",          lat:49.320, lon:7.053 },
+  { plz:"66292", ort:"Riegelsberg",          lat:49.294, lon:6.938 },
+  { plz:"66299", ort:"Friedrichsthal",       lat:49.332, lon:7.089 },
+  { plz:"66333", ort:"Völklingen",           lat:49.252, lon:6.858 },
+  { plz:"66346", ort:"Püttlingen",           lat:49.294, lon:6.882 },
+  { plz:"66352", ort:"Großrosseln",          lat:49.194, lon:6.854 },
+  { plz:"66359", ort:"Bous",                lat:49.272, lon:6.794 },
+  { plz:"66386", ort:"St. Ingbert",          lat:49.276, lon:7.113 },
+  { plz:"66399", ort:"Mandelbachtal",        lat:49.170, lon:7.144 },
+  { plz:"66424", ort:"Homburg",              lat:49.326, lon:7.338 },
+  { plz:"66440", ort:"Blieskastel",          lat:49.238, lon:7.258 },
+  { plz:"66450", ort:"Bexbach",              lat:49.351, lon:7.256 },
+  { plz:"66453", ort:"Gersheim",             lat:49.171, lon:7.206 },
+  { plz:"66459", ort:"Kirkel",               lat:49.297, lon:7.231 },
+  { plz:"66538", ort:"Neunkirchen",          lat:49.347, lon:7.180 },
+  { plz:"66539", ort:"Neunkirchen",          lat:49.355, lon:7.192 },
+  { plz:"66540", ort:"Neunkirchen",          lat:49.341, lon:7.172 },
+  { plz:"66557", ort:"Illingen",             lat:49.375, lon:7.043 },
+  { plz:"66564", ort:"Ottweiler",            lat:49.401, lon:7.166 },
+  { plz:"66571", ort:"Eppelborn",            lat:49.404, lon:6.976 },
+  { plz:"66578", ort:"Schiffweiler",         lat:49.367, lon:7.128 },
+  { plz:"66583", ort:"Spiesen-Elversberg",   lat:49.318, lon:7.131 },
+  { plz:"66589", ort:"Merchweiler",          lat:49.364, lon:7.054 },
+  { plz:"66606", ort:"St. Wendel",           lat:49.467, lon:7.169 },
+  { plz:"66620", ort:"Nonnweiler",           lat:49.601, lon:6.963 },
+  { plz:"66625", ort:"Nohfelden",            lat:49.577, lon:7.148 },
+  { plz:"66629", ort:"Freisen",              lat:49.543, lon:7.244 },
+  { plz:"66636", ort:"Tholey",              lat:49.484, lon:7.034 },
+  { plz:"66640", ort:"Namborn",              lat:49.509, lon:7.186 },
+  { plz:"66646", ort:"Marpingen",            lat:49.450, lon:7.059 },
+  { plz:"66649", ort:"Oberthal",             lat:49.513, lon:7.082 },
+  { plz:"66663", ort:"Merzig",              lat:49.445, lon:6.638 },
+  { plz:"66679", ort:"Losheim am See",       lat:49.511, lon:6.741 },
+  { plz:"66687", ort:"Wadern",              lat:49.536, lon:6.887 },
+  { plz:"66693", ort:"Mettlach",             lat:49.495, lon:6.598 },
+  { plz:"66701", ort:"Beckingen",            lat:49.397, lon:6.699 },
+  { plz:"66706", ort:"Perl",                lat:49.470, lon:6.368 },
+  { plz:"66709", ort:"Weiskirchen",          lat:49.551, lon:6.819 },
+  { plz:"66740", ort:"Saarlouis",            lat:49.313, lon:6.752 },
+  { plz:"66763", ort:"Dillingen/Saar",       lat:49.355, lon:6.728 },
+  { plz:"66773", ort:"Schwalbach",           lat:49.298, lon:6.802 },
+  { plz:"66780", ort:"Rehlingen-Siersburg",  lat:49.361, lon:6.677 },
+  { plz:"66787", ort:"Wadgassen",            lat:49.268, lon:6.777 },
+  { plz:"66793", ort:"Saarwellingen",        lat:49.332, lon:6.800 },
+  { plz:"66798", ort:"Wallerfangen",         lat:49.323, lon:6.706 },
+  { plz:"66802", ort:"Überherrn",            lat:49.246, lon:6.701 },
+  { plz:"66806", ort:"Ensdorf",              lat:49.295, lon:6.775 },
+  { plz:"66809", ort:"Nalbach",              lat:49.381, lon:6.795 },
+  { plz:"66822", ort:"Lebach",              lat:49.413, lon:6.909 },
+  { plz:"66839", ort:"Schmelz",             lat:49.436, lon:6.849 },
+];
+
+// ─── Distanzberechnung (Haversine, vereinfacht) ──────────────────
+function distKm(lat1, lon1, lat2, lon2) {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180) * Math.cos(lat2*Math.PI/180) * Math.sin(dLon/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+// Nächstgelegene Station zu gegebenen Koordinaten finden
+function nearestStation(lat, lon) {
+  let best = null, bestDist = Infinity;
+  for (const [key, st] of Object.entries(STATIONS)) {
+    const d = distKm(lat, lon, st.lat, st.lon);
+    if (d < bestDist) { bestDist = d; best = key; }
+  }
+  return { key: best, dist: Math.round(bestDist) };
+}
+
+// ─── RNG helper ──────────────────────────────────────────────────
+function rng(s) { const x = Math.sin(s * 9301 + 49297) * 233280; return x - Math.floor(x); }
+
+// ─── SIMULATE HOURLY → daily max for last 42 days ────────────────
+// Represents what you'd fetch from DWD hourly/air_temperature/recent/
+function genTempData(stationKey, period) {
+  const st   = STATIONS[stationKey];
+  const seed = stationKey.charCodeAt(0) + stationKey.length;
+  const base = period === '6190' ? 19.5 : 21.2;
+
+  const labels = [], actual = [], bandLow = [], bandHigh = [], bandMid = [];
+  const today  = new Date(2026, 5, 29);
+
+  for (let i = -41; i <= 0; i++) {
+    const d = new Date(today); d.setDate(today.getDate() + i);
+    labels.push(`${d.getDate()}.${d.getMonth()+1}.`);
+
+    const doy = Math.floor((d - new Date(d.getFullYear(),0,0)) / 86400000);
+    const seasonal = Math.sin((doy - 80) / 365 * 2 * Math.PI) * 9;
+    const mid = base + seasonal + (seed % 3) * 0.3;
+
+    bandLow.push( +(mid - 3.5).toFixed(1));
+    bandHigh.push(+(mid + 3.5).toFixed(1));
+    bandMid.push( +(mid).toFixed(1));
+
+    // Simulate daily max from hourly peak (warm-biased for Saarland 2026)
+    const warmBias = (rng(i + seed) > 0.35) ? st.bias + rng(i*2+seed)*3.5 : st.bias - rng(i*3+seed)*1.5;
+    actual.push(+(mid + warmBias + (rng(i+seed+7)-0.5)).toFixed(1));
+  }
+  return { labels, actual, bandLow, bandHigh, bandMid };
+}
+
+// ─── SIMULATE rain: 30-day rolling sum over 42 days ──────────────
+function genRainData(stationKey, period) {
+  const seed = stationKey.charCodeAt(0) * 3 + 77;
+  const normalBase = period === '6190' ? 85 : 78; // mm/30d Klimanormal
+
+  const labels = [], actual = [], bandLow = [], bandHigh = [], bandMid = [];
+  const today = new Date(2026, 5, 29);
+
+  for (let i = -41; i <= 0; i++) {
+    const d = new Date(today); d.setDate(today.getDate() + i);
+    labels.push(`${d.getDate()}.${d.getMonth()+1}.`);
+
+    const seasonal = Math.sin((i + 180) / 365 * 2 * Math.PI) * 12;
+    const mid = normalBase + seasonal;
+    bandLow.push( +(mid - 25 + rng(i+seed)*5).toFixed(1));
+    bandHigh.push(+(mid + 30 + rng(i+seed+1)*8).toFixed(1));
+    bandMid.push( +(mid).toFixed(1));
+
+    // Current year: drier than normal
+    const dryBias = -28 + rng(i+seed+2)*10;
+    actual.push(Math.max(0, +(mid + dryBias + (rng(i+seed+3)-0.5)*4).toFixed(1)));
+  }
+  return { labels, actual, bandLow, bandHigh, bandMid };
+}
+
+// ─── SIMULATE Sommertage: yearly bars 1995–2026 ──────────────────
+function genSommerData(stationKey) {
+  const seed = stationKey.charCodeAt(0) * 7 + 33;
+  const years = [], counts = [];
+  for (let y = 1995; y <= 2026; y++) {
+    years.push(y);
+    // Trend: rising from ~12 in 1995 to ~28 in 2026
+    const trend = 12 + (y - 1995) * 0.55;
+    const noise = (rng(y + seed) - 0.5) * 14;
+    counts.push(Math.max(0, Math.round(trend + noise)));
+  }
+  return { years, counts };
+}
+
+// ─── VERDICTS ────────────────────────────────────────────────────
+function computeVerdict(stationKey) {
+  const st   = STATIONS[stationKey];
+  const seed = stationKey.charCodeAt(0);
+  const { actual: tActual } = genTempData(stationKey, '6190');
+  const tempMax = tActual[tActual.length - 1];
+  const tempNormal = 23.5;
+  const tempDiff = tempMax - tempNormal;
+
+  let tempClass, tempWord, tempHlClass;
+  if (tempDiff > 4)        { tempClass = 'val-warm';   tempWord = 'ungewöhnlich warm';        tempHlClass = 'hl-heat'; }
+  else if (tempDiff > 1.5) { tempClass = 'val-warm';   tempWord = 'etwas wärmer als normal';  tempHlClass = 'hl-heat'; }
+  else if (tempDiff < -4)  { tempClass = 'val-cool';   tempWord = 'ungewöhnlich kühl';        tempHlClass = 'hl-cool'; }
+  else if (tempDiff < -1.5){ tempClass = 'val-cool';   tempWord = 'etwas kühler als normal';  tempHlClass = 'hl-cool'; }
+  else                      { tempClass = 'val-normal'; tempWord = 'normal';                  tempHlClass = 'hl-normal'; }
+
+  const { actual: rActual } = genRainData(stationKey, '6190');
+  const regen30 = rActual[rActual.length - 1];
+  const regenNormal = 85;
+  const regenDiff = regen30 - regenNormal;
+
+  let regenClass, regenWord;
+  if (regenDiff < -30)      { regenClass = 'val-dry'; regenWord = 'ungewöhnlich wenig'; }
+  else if (regenDiff < -10) { regenClass = 'val-dry'; regenWord = 'etwas weniger als normal'; }
+  else if (regenDiff > 30)  { regenClass = 'val-wet'; regenWord = 'ungewöhnlich viel'; }
+  else if (regenDiff > 10)  { regenClass = 'val-wet'; regenWord = 'etwas mehr als normal'; }
+  else                       { regenClass = 'val-normal'; regenWord = 'normal'; }
+
+  const { counts } = genSommerData(stationKey);
+  const sommerCount = counts[counts.length - 1];
+
+  return { tempMax, tempDiff, tempClass, tempWord, tempHlClass, regen30, regenClass, regenWord, sommerCount };
+}
+
+// ─── CHART ───────────────────────────────────────────────────────
+let chart = null;
+
+function buildTempChart(stationKey, period) {
+  const { labels, actual, bandLow, bandHigh, bandMid } = genTempData(stationKey, period);
+
+  // Dynamic Y axis: min/max of all values, but always span ≥ 25°C
+  const allVals = [...actual, ...bandLow, ...bandHigh].filter(v => v != null);
+  let yMin = Math.floor(Math.min(...allVals)) - 1;
+  let yMax = Math.ceil(Math.max(...allVals)) + 1;
+  if (yMax - yMin < 25) {
+    const mid = (yMin + yMax) / 2;
+    yMin = Math.floor(mid - 12.5);
+    yMax = Math.ceil(mid + 12.5);
+  }
+
+  const lastIdx = actual.length - 1;
+
+  return {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        { label: 'Band oben', data: bandHigh, borderColor: 'transparent', backgroundColor: 'rgba(180,180,180,0.20)', fill: '+1', pointRadius: 0, tension: 0.4 },
+        { label: 'Band unten', data: bandLow, borderColor: 'transparent', backgroundColor: 'rgba(180,180,180,0.20)', fill: false, pointRadius: 0, tension: 0.4 },
+        { label: 'Klimamittel', data: bandMid, borderColor: 'rgba(120,120,120,0.5)', borderWidth: 1.5, borderDash: [5,4], backgroundColor: 'transparent', fill: false, pointRadius: 0, tension: 0.4 },
+        {
+          label: 'Tageshöchstwert',
+          data: actual,
+          borderColor: '#f85a54',
+          borderWidth: 2.5,
+          backgroundColor: 'transparent',
+          fill: false,
+          pointRadius: (c) => c.dataIndex === lastIdx ? 6 : 0,
+          pointBackgroundColor: '#f85a54',
+          pointBorderColor: 'white',
+          pointBorderWidth: 2,
+          tension: 0.2,
+        },
+      ]
+    },
+    options: buildLineOptions(yMin, yMax, (c) => {
+      if (c.datasetIndex === 3 && c.parsed.y != null) return `Tageshöchst: ${c.parsed.y} °C`;
+      if (c.datasetIndex === 2) return `Klimamittel: ${c.parsed.y} °C`;
+      return null;
+    }, (v) => v + ' °C')
+  };
+}
+
+function buildRainChart(stationKey, period) {
+  const { labels, actual, bandLow, bandHigh, bandMid } = genRainData(stationKey, period);
+
+  const allVals = [...actual, ...bandLow, ...bandHigh].filter(v => v != null);
+  let yMin = 0;
+  let yMax = Math.ceil(Math.max(...allVals)) + 10;
+  if (yMax - yMin < 25) yMax = yMin + 30;
+
+  const lastIdx = actual.length - 1;
+
+  return {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        { label: 'Band oben', data: bandHigh, borderColor: 'transparent', backgroundColor: 'rgba(180,180,180,0.20)', fill: '+1', pointRadius: 0, tension: 0.4 },
+        { label: 'Band unten', data: bandLow, borderColor: 'transparent', backgroundColor: 'rgba(180,180,180,0.20)', fill: false, pointRadius: 0, tension: 0.4 },
+        { label: 'Klimamittel', data: bandMid, borderColor: 'rgba(120,120,120,0.5)', borderWidth: 1.5, borderDash: [5,4], backgroundColor: 'transparent', fill: false, pointRadius: 0, tension: 0.4 },
+        {
+          label: '30-Tage-Niederschlag',
+          data: actual,
+          borderColor: '#004d8b',
+          borderWidth: 2.5,
+          backgroundColor: 'transparent',
+          fill: false,
+          pointRadius: (c) => c.dataIndex === lastIdx ? 6 : 0,
+          pointBackgroundColor: '#004d8b',
+          pointBorderColor: 'white',
+          pointBorderWidth: 2,
+          tension: 0.4,
+        },
+      ]
+    },
+    options: buildLineOptions(yMin, yMax, (c) => {
+      if (c.datasetIndex === 3 && c.parsed.y != null) return `Niederschlag: ${c.parsed.y} mm`;
+      if (c.datasetIndex === 2) return `Klimamittel: ${c.parsed.y} mm`;
+      return null;
+    }, (v) => v + ' mm')
+  };
+}
+
+function buildSommerChart(stationKey) {
+  const { years, counts } = genSommerData(stationKey);
+  const currentYear = 2026;
+  const colors = years.map(y => y === currentYear ? '#f29100' : '#f7c870');
+  const borders = years.map(y => y === currentYear ? '#c07000' : '#e0a840');
+
+  return {
+    type: 'bar',
+    data: {
+      labels: years.map(String),
+      datasets: [{
+        label: 'Sommertage (≥30°C)',
+        data: counts,
+        backgroundColor: colors,
+        borderColor: borders,
+        borderWidth: 1,
+        borderRadius: 1,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: (c) => `${c.parsed.y} Sommertage`,
+            title: (items) => items[0].label === String(currentYear) ? `${items[0].label} (aktuell)` : items[0].label,
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: { font: { family: "'Source Sans 3',sans-serif", size: 10 }, color: '#888', maxTicksLimit: 10, maxRotation: 0 },
+          border: { display: false },
+        },
+        y: {
+          min: 0,
+          grid: { color: 'rgba(0,0,0,0.06)' },
+          ticks: { font: { family: "'Source Sans 3',sans-serif", size: 11 }, color: '#888', callback: (v) => v + ' Tage' },
+          border: { display: false },
+        }
+      }
+    }
+  };
+}
+
+function buildLineOptions(yMin, yMax, labelFn, tickFn) {
+  return {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: labelFn,
+          title: (items) => items[0].label,
+        },
+        filter: (item) => item.datasetIndex >= 2,
+      },
+    },
+    scales: {
+      x: {
+        grid: { display: false },
+        ticks: { font: { family: "'Source Sans 3',sans-serif", size: 11 }, color: '#888', maxTicksLimit: 8 },
+        border: { display: false },
+      },
+      y: {
+        min: yMin,
+        max: yMax,
+        grid: { color: 'rgba(0,0,0,0.06)' },
+        ticks: { font: { family: "'Source Sans 3',sans-serif", size: 11 }, color: '#888', callback: tickFn },
+        border: { display: false },
+      }
+    }
+  };
+}
+
+function renderChart(cfg) {
+  const ctx = document.getElementById('mainChart').getContext('2d');
+  if (chart) chart.destroy();
+  chart = new Chart(ctx, cfg);
+}
+
+// ─── STATE ───────────────────────────────────────────────────────
+let currentPeriod  = '6190';
+let currentStation = 'ensheim';
+let currentMetric  = 'temp';  // 'temp' | 'regen' | 'sommer'
+
+// ─── METRIC SELECTION ────────────────────────────────────────────
+function selectMetric(m) {
+  currentMetric = m;
+  ['temp','regen','sommer'].forEach(k => {
+    const blk = document.getElementById('block-' + k);
+    blk.classList.toggle('active', k === m);
+    blk.classList.toggle('muted', k !== m);
+  });
+  // Period toggle only relevant for temp + regen
+  document.getElementById('period-toggle').style.display =
+    m === 'sommer' ? 'none' : 'flex';
+
+  updateChart();
+  updateHeadline();
+}
+
+function setPeriod(p) {
+  currentPeriod = p;
+  document.getElementById('btn-6190').classList.toggle('active', p === '6190');
+  document.getElementById('btn-9120').classList.toggle('active', p === '9120');
+  updateChart();
+  updateHeadline();
+}
+
+function updateChart() {
+  if (currentMetric === 'temp')   renderChart(buildTempChart(currentStation, currentPeriod));
+  if (currentMetric === 'regen')  renderChart(buildRainChart(currentStation, currentPeriod));
+  if (currentMetric === 'sommer') renderChart(buildSommerChart(currentStation));
+}
+
+function updateHeadline() {
+  const st = STATIONS[currentStation];
+  const hl = document.getElementById('chart-headline');
+  const desc = document.getElementById('chart-desc');
+  const periodLabel = currentPeriod === '6190' ? '1961–1990' : '1991–2020';
+
+  if (currentMetric === 'temp') {
+    const v = computeVerdict(currentStation);
+    hl.innerHTML = `So <em class="hl ${v.tempHlClass}">${v.tempWord === 'normal' ? 'normal' : v.tempDiff > 0 ? 'warm' : 'kühl'}</em> wird es heute in ${st.name} im historischen Vergleich`;
+    desc.textContent = `Das Diagramm zeigt die Tageshöchstwerte (aus stündlichen Messdaten) der letzten 42 Tage. Im grauen Bereich lagen die meisten Tage in ${periodLabel}. Die gestrichelte Linie ist der Durchschnitt.`;
+  } else if (currentMetric === 'regen') {
+    hl.innerHTML = `So viel hat es in den letzten <u>30 Tagen</u> in ${st.name} <em class="hl hl-rain">geregnet</em> – im historischen Vergleich`;
+    desc.textContent = `Der graue Bereich zeigt, wie viel Regen im selben 30-Tages-Zeitraum in ${periodLabel} üblicherweise gefallen ist, als der Klimawandel sich noch weniger stark ausgewirkt hat.`;
+  } else {
+    hl.innerHTML = `<em class="hl hl-orange">Sommertage</em> ab 30 °C in ${st.name} seit 1995`;
+    desc.textContent = `Jeder Balken steht für ein Jahr. Der aktuelle Jahresbalken (2026) ist hervorgehoben. Der Trend zeigt: Sommertage werden seit 1961 mehr.`;
+  }
+}
+
+function updateLeft() {
+  const v = computeVerdict(currentStation);
+  const st = STATIONS[currentStation];
+
+  document.getElementById('station-id-display').textContent = st.id;
+
+  // Temp
+  document.getElementById('temp-max').textContent = v.tempMax + ' °C';
+  document.getElementById('temp-max').className   = v.tempClass;
+  document.getElementById('temp-verdict').textContent = v.tempWord;
+  document.getElementById('temp-verdict').className   = v.tempClass;
+
+  // Regen
+  document.getElementById('regen-val').textContent = v.regen30 + ' mm';
+  document.getElementById('regen-val').className   = v.regenClass;
+  document.getElementById('regen-verdict').textContent = v.regenWord;
+  document.getElementById('regen-verdict').className   = v.regenClass;
+
+  // Sommertage
+  document.getElementById('sommer-val').textContent = v.sommerCount;
+}
+
+function fullUpdate() {
+  updateLeft();
+  updateHeadline();
+  updateChart();
+}
+
+document.getElementById('station-select').addEventListener('change', function() {
+  currentStation = this.value;
+  fullUpdate();
+});
+
+// ─── PLZ DROPDOWN ────────────────────────────────────────────────
+function applyPLZ(plz) {
+  const found = PLZ_DATA.find(p => p.plz === plz);
+  if (!found) return;
+
+  const { key, dist } = nearestStation(found.lat, found.lon);
+  currentStation = key;
+  const st = STATIONS[key];
+
+  document.getElementById('station-name-display').textContent = st.name;
+  document.getElementById('station-id-display').textContent   = st.id;
+  document.getElementById('station-dist-hint').textContent    = `ca. ${dist} km ·`;
+  document.getElementById('station-hint-text').innerHTML =
+    `Nicht jeder Ort hat eine eigene Wetterstation. Die nächstgelegene Station zu <strong>${found.ort} (${found.plz})</strong> ist <strong>${st.name}</strong> (ca. ${dist} km entfernt).`;
+
+  fullUpdate();
+}
+
+// Init — Standardwert Saarbrücken
+applyPLZ('66111');
+</script>
+</body>
+</html>
