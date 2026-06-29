@@ -252,7 +252,7 @@
           <div class="metric-title">Sommertage</div>
         </div>
         <div class="metric-body">
-          <span class="val-orange">Sommertage</span> ab 25 °C:
+          <span class="val-orange">Sommertage</span> ab 30 °C:
           <span class="val-orange" id="sommer-val">–</span> seit März.
           In welchem Monat diese Tage auftreten, schwankt von Jahr zu Jahr,
           seit 1961 werden es aber <span class="val-orange" id="sommer-trend">immer mehr</span>.
@@ -422,10 +422,9 @@ function getDWDTempData(stationKey, period) {
   const aktuell = DWD.aktuell?.[stationKey];
   const normalen = DWD.klimanormale?.[stationKey];
   if (!aktuell || !normalen) return null;
-  let kn = normalen[period === '6190' ? 'temp_6190' : 'temp_9120'];
-  if (!kn && period === '6190') kn = normalen['temp_9120'];
+  const kn = normalen[period === '6190' ? 'temp_6190' : 'temp_9120'];
   if (!kn) return null;
-  const tage = (aktuell.temp_tage || []).filter(t => t && t.tag);
+  const tage = aktuell.temp_tage || [];
   return {
     labels:   tage.map(t => { const d = new Date(t.tag); return d.getDate()+'.'+(d.getMonth()+1)+'.'; }),
     actual:   tage.map(t => t.tmax),
@@ -440,10 +439,9 @@ function getDWDRainData(stationKey, period) {
   const aktuell = DWD.aktuell?.[stationKey];
   const normalen = DWD.klimanormale?.[stationKey];
   if (!aktuell || !normalen) return null;
-  let kn = normalen[period === '6190' ? 'regen_6190' : 'regen_9120'];
-  if (!kn && period === '6190') kn = normalen['regen_9120'];
+  const kn = normalen[period === '6190' ? 'regen_6190' : 'regen_9120'];
   if (!kn) return null;
-  const tage = (aktuell.regen_tage || []).filter(t => t && t.tag);
+  const tage = aktuell.regen_tage || [];
   return {
     labels:   tage.map(t => { const d = new Date(t.tag); return d.getDate()+'.'+(d.getMonth()+1)+'.'; }),
     actual:   tage.map(t => t.regen_30d),
@@ -455,7 +453,7 @@ function getDWDRainData(stationKey, period) {
 
 function getDWDSommerData(stationKey) {
   if (!DWD) return null;
-  const d = DWD.aktuell?.[stationKey]?.sommertage || DWD.aktuell?.[stationKey]?.sommertage_recent;
+  const d = DWD.aktuell?.[stationKey]?.sommertage_recent;
   if (!d) return null;
   return { years: d.map(r => r.jahr), counts: d.map(r => r.anzahl) };
 }
@@ -464,11 +462,10 @@ function getDWDVerdict(stationKey) {
   if (!DWD) return null;
   const a = DWD.aktuell?.[stationKey];
   if (!a) return null;
-  const sArr = DWD.aktuell[stationKey].sommertage || DWD.aktuell[stationKey].sommertage_recent || [];
   return {
     tempMax: a.temp_heute_max,
     regen30: a.regen_30d_aktuell,
-    sommerCount: sArr.slice(-1)[0]?.anzahl ?? null,
+    sommerCount: (DWD.aktuell[stationKey].sommertage_recent || []).slice(-1)[0]?.anzahl ?? null,
   };
 }
 
@@ -543,9 +540,9 @@ function buildTempChart(stationKey, period) {
       datasets: [
         { label: 'Band oben', data: bandHigh, borderColor: 'transparent', backgroundColor: 'rgba(180,180,180,0.20)', fill: '+1', pointRadius: 0, tension: 0.4 },
         { label: 'Band unten', data: bandLow, borderColor: 'transparent', backgroundColor: 'rgba(180,180,180,0.20)', fill: false, pointRadius: 0, tension: 0.4 },
-        { label: 'Mittelwert', data: bandMid, borderColor: 'rgba(120,120,120,0.5)', borderWidth: 1.5, borderDash: [5,4], backgroundColor: 'transparent', fill: false, pointRadius: 0, tension: 0.4 },
+        { label: 'Klimamittel', data: bandMid, borderColor: 'rgba(120,120,120,0.5)', borderWidth: 1.5, borderDash: [5,4], backgroundColor: 'transparent', fill: false, pointRadius: 0, tension: 0.4 },
         {
-          label: 'Tageshöchsttemperatur',
+          label: 'Tageshöchstwert',
           data: actual,
           borderColor: '#f85a54',
           borderWidth: 2.5,
@@ -586,7 +583,7 @@ function buildRainChart(stationKey, period) {
       datasets: [
         { label: 'Band oben', data: bandHigh, borderColor: 'transparent', backgroundColor: 'rgba(180,180,180,0.20)', fill: '+1', pointRadius: 0, tension: 0.4 },
         { label: 'Band unten', data: bandLow, borderColor: 'transparent', backgroundColor: 'rgba(180,180,180,0.20)', fill: false, pointRadius: 0, tension: 0.4 },
-        { label: 'Mittelwert', data: bandMid, borderColor: 'rgba(120,120,120,0.5)', borderWidth: 1.5, borderDash: [5,4], backgroundColor: 'transparent', fill: false, pointRadius: 0, tension: 0.4 },
+        { label: 'Klimamittel', data: bandMid, borderColor: 'rgba(120,120,120,0.5)', borderWidth: 1.5, borderDash: [5,4], backgroundColor: 'transparent', fill: false, pointRadius: 0, tension: 0.4 },
         {
           label: '30-Tage-Niederschlag',
           data: actual,
@@ -610,44 +607,20 @@ function buildRainChart(stationKey, period) {
   };
 }
 
-const valueLabelsPlugin = {
-  id: 'valueLabels',
-  afterDatasetsDraw(chart) {
-    const { ctx } = chart;
-    const ds = chart.data.datasets[0];
-    const meta = chart.getDatasetMeta(0);
-    ctx.save();
-    ctx.fillStyle = '#6f6f6f';
-    ctx.font = "10px 'Inter',sans-serif";
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'bottom';
-    meta.data.forEach((bar, i) => {
-      const year = parseInt(chart.data.labels[i], 10);
-      if (year >= 2000) {
-        const val = ds.data[i];
-        if (val != null) ctx.fillText(String(val), bar.x, bar.y - 4);
-      }
-    });
-    ctx.restore();
-  }
-};
-
 function buildSommerChart(stationKey) {
   const dwdData = getDWDSommerData(stationKey);
   if (!dwdData) return null;
   const { years, counts } = dwdData;
-
-  const currentYear = new Date().getFullYear();
+  const currentYear = 2026;
   const colors = years.map(y => y === currentYear ? '#f29100' : '#f7c870');
   const borders = years.map(y => y === currentYear ? '#c07000' : '#e0a840');
 
   return {
     type: 'bar',
-    plugins: [valueLabelsPlugin],
     data: {
       labels: years.map(String),
       datasets: [{
-        label: 'Sommertage (≥25 °C)',
+        label: 'Sommertage (≥30°C)',
         data: counts,
         backgroundColor: colors,
         borderColor: borders,
@@ -662,8 +635,8 @@ function buildSommerChart(stationKey) {
         legend: { display: false },
         tooltip: {
           callbacks: {
-            title: (items) => items[0].label,
             label: (c) => `${c.parsed.y} Sommertage`,
+            title: (items) => items[0].label === String(currentYear) ? `${items[0].label} (aktuell)` : items[0].label,
           }
         }
       },
@@ -679,6 +652,38 @@ function buildSommerChart(stationKey) {
           ticks: { font: { family: "'Inter',sans-serif", size: 11 }, color: '#888', callback: (v) => v + ' Tage' },
           border: { display: false },
         }
+      }
+    }
+  };
+}
+
+function buildLineOptions(yMin, yMax, labelFn, tickFn) {
+  return {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: labelFn,
+          title: (items) => items[0].label,
+        },
+        filter: (item) => item.datasetIndex >= 2,
+      },
+    },
+    scales: {
+      x: {
+        grid: { display: false },
+        ticks: { font: { family: "'Inter',sans-serif", size: 11 }, color: '#888', maxTicksLimit: 8 },
+        border: { display: false },
+      },
+      y: {
+        min: yMin,
+        max: yMax,
+        grid: { color: 'rgba(0,0,0,0.06)' },
+        ticks: { font: { family: "'Inter',sans-serif", size: 11 }, color: '#888', callback: tickFn },
+        border: { display: false },
       }
     }
   };
@@ -747,16 +752,13 @@ function updateHeadline() {
 
   if (currentMetric === 'temp') {
     const v = computeVerdict(currentStation);
-    const lead = (v.tempClass === 'val-warm') ? 'So heiß ist es heute'
-      : (v.tempClass === 'val-cool') ? 'So kühl ist es heute'
-      : 'So warm ist es heute';
-    hl.innerHTML = `${lead} in ${st.name}`;
-    desc.textContent = `Das Diagramm zeigt die Tageshöchsttemperaturen der letzten 42 Tage. Der graue Bereich ist der Normalbereich (10.–90. Perzentil) der gewählten Referenzperiode; die gestrichelte Linie ist der Mittelwert.`;
+    hl.innerHTML = `So <em class="hl ${v.tempHlClass}">${v.tempWord === 'normal' ? 'normal' : v.tempDiff > 0 ? 'warm' : 'kühl'}</em> wird es heute in ${st.name} im historischen Vergleich`;
+    desc.textContent = `Das Diagramm zeigt die Tageshöchstwerte (aus stündlichen Messdaten) der letzten 42 Tage. Im grauen Bereich lagen die meisten Tage in ${periodLabel}. Die gestrichelte Linie ist der Durchschnitt.`;
   } else if (currentMetric === 'regen') {
     hl.innerHTML = `So viel hat es in den letzten <u>30 Tagen</u> in ${st.name} <em class="hl hl-rain">geregnet</em> – im historischen Vergleich`;
     desc.textContent = `Der graue Bereich zeigt, wie viel Regen im selben 30-Tages-Zeitraum in ${periodLabel} üblicherweise gefallen ist, als der Klimawandel sich noch weniger stark ausgewirkt hat.`;
   } else {
-    hl.innerHTML = `<em class="hl hl-orange">Sommertage</em> ab 25 °C in ${st.name} seit 1995`;
+    hl.innerHTML = `<em class="hl hl-orange">Sommertage</em> ab 30 °C in ${st.name} seit 1995`;
     desc.textContent = `Jeder Balken steht für ein Jahr. Der aktuelle Jahresbalken (2026) ist hervorgehoben. Der Trend zeigt: Sommertage werden seit 1961 mehr.`;
   }
 }
@@ -787,13 +789,10 @@ function fullUpdate() {
   updateChart();
 }
 
-const stationSelect = document.getElementById('station-select');
-if (stationSelect) {
-  stationSelect.addEventListener('change', function() {
-    currentStation = this.value;
-    fullUpdate();
-  });
-}
+document.getElementById('station-select').addEventListener('change', function() {
+  currentStation = this.value;
+  fullUpdate();
+});
 
 // ─── PLZ DROPDOWN ────────────────────────────────────────────────
 function applyPLZ(plz) {
