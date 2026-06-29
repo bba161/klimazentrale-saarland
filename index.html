@@ -32,9 +32,11 @@
   body { font-family: var(--sans); background: var(--bg); color: var(--text); font-size: 12px; line-height: 1.5; }
 
   /* ── HEADER ── */
-  .page-header { border-bottom: 2px solid var(--rain); padding: 14px 0 10px; text-align: left; margin-bottom: 24px; }
+  .page-header { border-bottom: none; padding: 14px 0 10px; text-align: left; margin-bottom: 24px; }
   .page-header .eyebrow { display: none; }
-  .page-header h1 { font-family: var(--sans); font-size: 16px; font-weight: 700; letter-spacing: -0.01em; text-align: left; }
+  .page-header h1 { font-family: var(--sans); font-size: 16px; font-weight: 700; letter-spacing: -0.01em; text-align: left; color: #004d8b; }
+  .page-header-inner { display: flex; align-items: center; justify-content: space-between; }
+  .logo-placeholder { width: 120px; height: 40px; flex-shrink: 0; }
 
   /* ── LAYOUT ── */
   .container { max-width: 900px; margin: 0 auto; padding: 0 20px 60px; }
@@ -65,14 +67,17 @@
     cursor: pointer;
     transition: background 0.15s;
   }
-  .metric-block.active  { border-left-color: var(--accent-left); background: var(--bg); }
+  .metric-block.active  { background: var(--bg); }
+  #block-temp.active  { border-left-color: var(--heat); }
+  #block-regen.active { border-left-color: var(--rain); }
+  #block-sommer.active{ border-left-color: var(--orange); }
   .metric-block.muted   { background: var(--bg-muted); }
   .metric-block:hover:not(.active) { background: #eeedea; }
   .metric-block + .metric-block { border-top: 1px solid var(--border); }
 
   .metric-header { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
   .metric-icon { font-size: 18px; line-height: 1; flex-shrink: 0; }
-  .metric-block.muted .metric-icon { filter: grayscale(1) opacity(0.5); }
+  .metric-block.muted .metric-icon { opacity: 0.35; }
   .metric-title { font-weight: 600; font-size: 12px; }
   .metric-block.muted .metric-title { color: #888; }
   .metric-body { font-size: 11px; color: #444; line-height: 1.6; padding-left: 36px; }
@@ -127,8 +132,10 @@
 <body>
 
 <header class="page-header">
-  <div class="eyebrow">Rheinische Post Mediengruppe · Datenjournalismus</div>
-  <h1>Ist das Wetter heute normal?</h1>
+  <div class="page-header-inner">
+    <h1>Ist das Wetter heute normal?</h1>
+    <div class="logo-placeholder"><!-- Logo hier einfügen --></div>
+  </div>
 </header>
 
 <main class="container">
@@ -208,14 +215,9 @@
         <option value="66839">66839 – Schmelz</option>
       </select>
     </div>
-    <div class="station-display">
-      <span id="station-dist-hint"></span>
-      Wetterstation: <strong id="station-name-display">–</strong>
-    </div>
+    <div class="station-display" id="station-display" style="display:none;"></div>
   </div>
-  <p class="station-hint" id="station-hint-text">
-    Geben Sie Ihre PLZ ein — wir finden automatisch die nächste DWD-Wetterstation im Saarland.
-  </p>
+  <p class="station-hint" id="station-hint-text" style="font-size:11px; color:var(--text-muted); margin: 6px 0 14px;"></p>
 
   <div class="main-card">
 
@@ -224,7 +226,7 @@
 
       <div class="metric-block active" id="block-temp" onclick="selectMetric('temp')">
         <div class="metric-header">
-          <div class="metric-icon">🌡</div>
+          <div class="metric-icon" style="color:var(--heat)">🌡</div>
           <div class="metric-title">Temperatur</div>
         </div>
         <div class="metric-body">
@@ -235,7 +237,7 @@
 
       <div class="metric-block muted" id="block-regen" onclick="selectMetric('regen')">
         <div class="metric-header">
-          <div class="metric-icon">🌧</div>
+          <div class="metric-icon" style="color:var(--rain)">🌧</div>
           <div class="metric-title">Regen</div>
         </div>
         <div class="metric-body">
@@ -246,7 +248,7 @@
 
       <div class="metric-block muted" id="block-sommer" onclick="selectMetric('sommer')">
         <div class="metric-header">
-          <div class="metric-icon">☀️</div>
+          <div class="metric-icon" style="color:var(--orange)">☀️</div>
           <div class="metric-title">Sommertage</div>
         </div>
         <div class="metric-body">
@@ -264,9 +266,10 @@
       <div class="chart-headline" id="chart-headline">–</div>
       <p class="chart-desc" id="chart-desc">–</p>
       <div class="period-toggle" id="period-toggle">
-        <button class="period-btn active" id="btn-6190" onclick="setPeriod('6190')">1961–1990</button>
-        <button class="period-btn"        id="btn-9120" onclick="setPeriod('9120')">1991–2020</button>
+        <button class="period-btn active" id="btn-6190" onclick="setPeriod('6190')" title="Klimanormale 1961–1990 – vor dem starken Klimawandel">Referenz 1961–1990</button>
+        <button class="period-btn" id="btn-9120" onclick="setPeriod('9120')" title="Klimanormale 1991–2020 – aktuellere Vergleichsperiode, bereits durch Klimawandel beeinflusst">Referenz 1991–2020</button>
       </div>
+      <p id="period-explanation" style="font-size:10px; color:var(--text-muted); margin-bottom:8px;"></p>
       <div class="chart-wrap">
         <canvas id="mainChart"></canvas>
       </div>
@@ -275,8 +278,7 @@
   </div>
 
   <p class="footer-note">
-    Datenquelle: <a href="https://opendata.dwd.de/" target="_blank">Deutscher Wetterdienst (DWD) Open Data</a> ·
-    Prototyp mit simulierten Musterdaten. Echte DWD-Stundenwerte werden nach Datenbankaufbau eingespeist.
+    Datenquelle: <a href="https://opendata.dwd.de/" target="_blank">Deutscher Wetterdienst (DWD) Open Data</a> · Stündlich aktualisiert · Stand: <span id="daten-stand">–</span>
   </p>
 
 </main>
@@ -467,109 +469,46 @@ function getDWDVerdict(stationKey) {
   };
 }
 
-// ─── RNG helper (für Simulationsdaten als Fallback) ──────────────
-function rng(s) { const x = Math.sin(s * 9301 + 49297) * 233280; return x - Math.floor(x); }
-
-// ─── SIMULATE HOURLY → daily max for last 42 days ────────────────
-// Represents what you'd fetch from DWD hourly/air_temperature/recent/
-function genTempData(stationKey, period) {
-  const st   = STATIONS[stationKey];
-  const seed = stationKey.charCodeAt(0) + stationKey.length;
-  const base = period === '6190' ? 19.5 : 21.2;
-
-  const labels = [], actual = [], bandLow = [], bandHigh = [], bandMid = [];
-  const today  = new Date(2026, 5, 29);
-
-  for (let i = -41; i <= 0; i++) {
-    const d = new Date(today); d.setDate(today.getDate() + i);
-    labels.push(`${d.getDate()}.${d.getMonth()+1}.`);
-
-    const doy = Math.floor((d - new Date(d.getFullYear(),0,0)) / 86400000);
-    const seasonal = Math.sin((doy - 80) / 365 * 2 * Math.PI) * 9;
-    const mid = base + seasonal + (seed % 3) * 0.3;
-
-    bandLow.push( +(mid - 3.5).toFixed(1));
-    bandHigh.push(+(mid + 3.5).toFixed(1));
-    bandMid.push( +(mid).toFixed(1));
-
-    // Simulate daily max from hourly peak (warm-biased for Saarland 2026)
-    const warmBias = (rng(i + seed) > 0.35) ? st.bias + rng(i*2+seed)*3.5 : st.bias - rng(i*3+seed)*1.5;
-    actual.push(+(mid + warmBias + (rng(i+seed+7)-0.5)).toFixed(1));
-  }
-  return { labels, actual, bandLow, bandHigh, bandMid };
-}
-
-// ─── SIMULATE rain: 30-day rolling sum over 42 days ──────────────
-function genRainData(stationKey, period) {
-  const seed = stationKey.charCodeAt(0) * 3 + 77;
-  const normalBase = period === '6190' ? 85 : 78; // mm/30d Klimanormal
-
-  const labels = [], actual = [], bandLow = [], bandHigh = [], bandMid = [];
-  const today = new Date(2026, 5, 29);
-
-  for (let i = -41; i <= 0; i++) {
-    const d = new Date(today); d.setDate(today.getDate() + i);
-    labels.push(`${d.getDate()}.${d.getMonth()+1}.`);
-
-    const seasonal = Math.sin((i + 180) / 365 * 2 * Math.PI) * 12;
-    const mid = normalBase + seasonal;
-    bandLow.push( +(mid - 25 + rng(i+seed)*5).toFixed(1));
-    bandHigh.push(+(mid + 30 + rng(i+seed+1)*8).toFixed(1));
-    bandMid.push( +(mid).toFixed(1));
-
-    // Current year: drier than normal
-    const dryBias = -28 + rng(i+seed+2)*10;
-    actual.push(Math.max(0, +(mid + dryBias + (rng(i+seed+3)-0.5)*4).toFixed(1)));
-  }
-  return { labels, actual, bandLow, bandHigh, bandMid };
-}
-
-// ─── SIMULATE Sommertage: yearly bars 1995–2026 ──────────────────
-function genSommerData(stationKey) {
-  const seed = stationKey.charCodeAt(0) * 7 + 33;
-  const years = [], counts = [];
-  for (let y = 1995; y <= 2026; y++) {
-    years.push(y);
-    // Trend: rising from ~12 in 1995 to ~28 in 2026
-    const trend = 12 + (y - 1995) * 0.55;
-    const noise = (rng(y + seed) - 0.5) * 14;
-    counts.push(Math.max(0, Math.round(trend + noise)));
-  }
-  return { years, counts };
-}
-
 // ─── VERDICTS ────────────────────────────────────────────────────
 function computeVerdict(stationKey) {
-  const st   = STATIONS[stationKey];
-  const seed = stationKey.charCodeAt(0);
-  const { actual: tActual } = genTempData(stationKey, '6190');
-  const tempMax = tActual[tActual.length - 1];
-  const tempNormal = 23.5;
-  const tempDiff = tempMax - tempNormal;
+  // Band-basierte Logik: Wert wird mit dem grauen Band (p10–p90) verglichen
+  // Quelle: echte DWD-Daten (getDWDTempData/getDWDRainData) oder Fallback
+  const tempData = getDWDTempData(stationKey, currentPeriod);
+  const rainData = getDWDRainData(stationKey, currentPeriod);
 
-  let tempClass, tempWord, tempHlClass;
-  if (tempDiff > 4)        { tempClass = 'val-warm';   tempWord = 'ungewöhnlich warm';        tempHlClass = 'hl-heat'; }
-  else if (tempDiff > 1.5) { tempClass = 'val-warm';   tempWord = 'etwas wärmer als normal';  tempHlClass = 'hl-heat'; }
-  else if (tempDiff < -4)  { tempClass = 'val-cool';   tempWord = 'ungewöhnlich kühl';        tempHlClass = 'hl-cool'; }
-  else if (tempDiff < -1.5){ tempClass = 'val-cool';   tempWord = 'etwas kühler als normal';  tempHlClass = 'hl-cool'; }
-  else                      { tempClass = 'val-normal'; tempWord = 'normal';                  tempHlClass = 'hl-normal'; }
+  // ── Temperatur ──
+  let tempMax = null, tempClass = 'val-normal', tempWord = 'normal', tempHlClass = 'hl-normal';
+  if (tempData) {
+    const last = tempData.actual.length - 1;
+    tempMax = tempData.actual[last];
+    const lo  = tempData.bandLow[last];
+    const hi  = tempData.bandHigh[last];
+    if (tempMax != null && lo != null && hi != null) {
+      if (tempMax > hi)       { tempClass = 'val-warm';   tempWord = 'ungewöhnlich warm';       tempHlClass = 'hl-heat'; }
+      else if (tempMax < lo)  { tempClass = 'val-cool';   tempWord = 'ungewöhnlich kühl';       tempHlClass = 'hl-cool'; }
+      else                    { tempClass = 'val-normal'; tempWord = 'im normalen Bereich';     tempHlClass = 'hl-normal'; }
+    }
+  }
 
-  const { actual: rActual } = genRainData(stationKey, '6190');
-  const regen30 = rActual[rActual.length - 1];
-  const regenNormal = 85;
-  const regenDiff = regen30 - regenNormal;
+  // ── Regen ──
+  let regen30 = null, regenClass = 'val-normal', regenWord = 'normal';
+  if (rainData) {
+    const last = rainData.actual.length - 1;
+    regen30 = rainData.actual[last];
+    const lo = rainData.bandLow[last];
+    const hi = rainData.bandHigh[last];
+    if (regen30 != null && lo != null && hi != null) {
+      if (regen30 > hi)      { regenClass = 'val-wet'; regenWord = 'ungewöhnlich viel'; }
+      else if (regen30 < lo) { regenClass = 'val-dry'; regenWord = 'ungewöhnlich wenig'; }
+      else                   { regenClass = 'val-normal'; regenWord = 'im normalen Bereich'; }
+    }
+  }
 
-  let regenClass, regenWord;
-  if (regenDiff < -30)      { regenClass = 'val-dry'; regenWord = 'ungewöhnlich wenig'; }
-  else if (regenDiff < -10) { regenClass = 'val-dry'; regenWord = 'etwas weniger als normal'; }
-  else if (regenDiff > 30)  { regenClass = 'val-wet'; regenWord = 'ungewöhnlich viel'; }
-  else if (regenDiff > 10)  { regenClass = 'val-wet'; regenWord = 'etwas mehr als normal'; }
-  else                       { regenClass = 'val-normal'; regenWord = 'normal'; }
+  // ── Sommertage ──
+  const sommerData = getDWDSommerData(stationKey);
+  const sommerCount = sommerData ? sommerData.counts[sommerData.counts.length - 1] : null;
 
-  const { counts } = genSommerData(stationKey);
-  const sommerCount = counts[counts.length - 1];
-
-  return { tempMax, tempDiff, tempClass, tempWord, tempHlClass, regen30, regenClass, regenWord, sommerCount };
+  return { tempMax, tempClass, tempWord, tempHlClass, regen30, regenClass, regenWord, sommerCount };
 }
 
 // ─── CHART ───────────────────────────────────────────────────────
@@ -577,7 +516,8 @@ let chart = null;
 
 function buildTempChart(stationKey, period) {
   // Echte Daten bevorzugen, Simulation als Fallback
-  const data = getDWDTempData(stationKey, period) || genTempData(stationKey, period);
+  const data = getDWDTempData(stationKey, period);
+  if (!data) return null;
 
   const { labels, actual, bandLow, bandHigh, bandMid } = data;
 
@@ -625,7 +565,8 @@ function buildTempChart(stationKey, period) {
 }
 
 function buildRainChart(stationKey, period) {
-  const data = getDWDRainData(stationKey, period) || genRainData(stationKey, period);
+  const data = getDWDRainData(stationKey, period);
+  if (!data) return null;
   const { labels, actual, bandLow, bandHigh, bandMid } = data;
 
   const allVals = [...actual, ...bandLow, ...bandHigh].filter(v => v != null);
@@ -750,6 +691,16 @@ function buildLineOptions(yMin, yMax, labelFn, tickFn) {
 function renderChart(cfg) {
   const ctx = document.getElementById('mainChart').getContext('2d');
   if (chart) chart.destroy();
+  if (!cfg) {
+    // Keine Daten verfügbar: Platzhalter anzeigen
+    chart = null;
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.fillStyle = '#bbb';
+    ctx.font = "12px 'Inter',sans-serif";
+    ctx.textAlign = 'center';
+    ctx.fillText('Daten werden geladen …', ctx.canvas.width / 2, ctx.canvas.height / 2);
+    return;
+  }
   chart = new Chart(ctx, cfg);
 }
 
@@ -778,6 +729,10 @@ function setPeriod(p) {
   currentPeriod = p;
   document.getElementById('btn-6190').classList.toggle('active', p === '6190');
   document.getElementById('btn-9120').classList.toggle('active', p === '9120');
+  const el = document.getElementById('period-explanation');
+  if (el) el.textContent = p === '6190'
+    ? 'Grauer Bereich: typische Schwankungsbreite 1961–1990 (vor dem verstärkten Klimawandel). Werte außerhalb gelten als ungewöhnlich.'
+    : 'Grauer Bereich: typische Schwankungsbreite 1991–2020 (diese Periode ist bereits wärmer – der Maßstab für „normal" verschiebt sich).';
   updateChart();
   updateHeadline();
 }
@@ -812,19 +767,19 @@ function updateLeft() {
   const st = STATIONS[currentStation];
 
   // Temp
-  document.getElementById('temp-max').textContent = v.tempMax + ' °C';
+  document.getElementById('temp-max').textContent = v.tempMax != null ? v.tempMax + ' °C' : '–';
   document.getElementById('temp-max').className   = v.tempClass;
   document.getElementById('temp-verdict').textContent = v.tempWord;
   document.getElementById('temp-verdict').className   = v.tempClass;
 
   // Regen
-  document.getElementById('regen-val').textContent = v.regen30 + ' mm';
+  document.getElementById('regen-val').textContent = v.regen30 != null ? v.regen30 + ' mm' : '–';
   document.getElementById('regen-val').className   = v.regenClass;
   document.getElementById('regen-verdict').textContent = v.regenWord;
   document.getElementById('regen-verdict').className   = v.regenClass;
 
   // Sommertage
-  document.getElementById('sommer-val').textContent = v.sommerCount;
+  document.getElementById('sommer-val').textContent = v.sommerCount != null ? v.sommerCount : '–';
 }
 
 function fullUpdate() {
@@ -847,15 +802,14 @@ function applyPLZ(plz) {
   currentStation = key;
   const st = STATIONS[key];
 
-  document.getElementById('station-name-display').textContent = st.name;
-  document.getElementById('station-dist-hint').textContent    = `ca. ${dist} km ·`;
   document.getElementById('station-hint-text').innerHTML =
-    `Nicht jeder Ort hat eine eigene Wetterstation. Die nächstgelegene Station zu <strong>${found.ort} (${found.plz})</strong> ist <strong>${st.name}</strong> (ca. ${dist} km entfernt).`;
+    `Nicht jeder Ort hat eine eigene Wetterstation. Die nächstgelegene Station zu <strong>${found.ort} (${found.plz})</strong> ist <strong>${st.name}</strong>.`;
 
   fullUpdate();
 }
 
 // Init — Standardwert Saarbrücken
+setPeriod('6190'); // setzt auch Erklärungstext
 applyPLZ('66111');
 </script>
 </body>
