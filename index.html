@@ -32,9 +32,9 @@
   body { font-family: var(--sans); background: var(--bg); color: var(--text); font-size: 12px; line-height: 1.5; }
 
   /* ── HEADER ── */
-  .page-header { border-bottom: none; padding: 14px 0 10px; text-align: left; margin-bottom: 24px; }
+  .page-header { border-bottom: none; padding: 10px 0 6px; text-align: left; margin-bottom: 16px; }
   .page-header .eyebrow { display: none; }
-  .page-header h1 { font-family: var(--sans); font-size: 16px; font-weight: 700; letter-spacing: -0.01em; text-align: left; color: #004d8b; }
+  .page-header h1 { font-family: var(--sans); font-size: 14px; font-weight: 700; letter-spacing: -0.01em; text-align: left; color: #004d8b; }
   .page-header-inner { display: flex; align-items: center; justify-content: space-between; }
   .logo-placeholder { width: 120px; height: 40px; flex-shrink: 0; }
 
@@ -609,7 +609,8 @@ function buildRainChart(stationKey, period) {
 
 function buildSommerChart(stationKey) {
   const dwdData = getDWDSommerData(stationKey);
-  const { years, counts } = dwdData || genSommerData(stationKey);
+  if (!dwdData) return null;
+  const { years, counts } = dwdData;
   const currentYear = 2026;
   const colors = years.map(y => y === currentYear ? '#f29100' : '#f7c870');
   const borders = years.map(y => y === currentYear ? '#c07000' : '#e0a840');
@@ -808,9 +809,12 @@ function applyPLZ(plz) {
   fullUpdate();
 }
 
-// Init — Standardwert Saarbrücken
-setPeriod('6190'); // setzt auch Erklärungstext
-applyPLZ('66111');
+// Init — DWD-Daten laden, dann Dashboard aufbauen
+(async () => {
+  await ladeDWDDaten();   // echte JSON laden (wartet bis fertig)
+  setPeriod('6190');      // Erklärungstext setzen
+  applyPLZ('66111');      // Saarbrücken als Standard
+})();
 </script>
 </body>
 </html>
