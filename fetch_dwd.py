@@ -201,11 +201,11 @@ for key, st in STATIONEN.items():
             heute_row = daily[daily['tag'] == str(heute)]
             sd['temp_heute_max'] = round(float(heute_row['tmax'].iloc[0]), 1) if not heute_row.empty else None
 
-            # Sommertage (≥30°C) je Jahr seit 1995
+            # Sommertage (≥25°C) je Jahr seit 1995
             daily['tag'] = pd.to_datetime(daily['tag'])
             daily['jahr'] = daily['tag'].dt.year
             st_df = daily[daily['jahr'] >= 1995].groupby('jahr').apply(
-                lambda x: int((x['tmax'] >= 30).sum())
+                lambda x: int((x['tmax'] >= 25).sum())
             ).reset_index()
             st_df.columns = ['jahr', 'anzahl']
             sd['sommertage_recent'] = st_df.to_dict(orient='records')
