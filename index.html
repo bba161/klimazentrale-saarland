@@ -789,10 +789,13 @@ function fullUpdate() {
   updateChart();
 }
 
-document.getElementById('station-select').addEventListener('change', function() {
-  currentStation = this.value;
-  fullUpdate();
-});
+const stationSelect = document.getElementById('station-select');
+if (stationSelect) {
+  stationSelect.addEventListener('change', function() {
+    currentStation = this.value;
+    fullUpdate();
+  });
+}
 
 // ─── PLZ DROPDOWN ────────────────────────────────────────────────
 function applyPLZ(plz) {
