@@ -1,6 +1,6 @@
 {
   "meta": {
-    "erstellt_am": "2026-07-02T22:48:59Z",
+    "erstellt_am": "2026-07-03T10:13:01Z",
     "quelle": "Deutscher Wetterdienst (DWD) Open Data",
     "url": "https://opendata.dwd.de/",
     "stationen": {
@@ -49510,14 +49510,9 @@
   },
   "aktuell": {
     "ensheim": {
-      "temp_aktuell_stunde": 16.4,
+      "temp_aktuell_stunde": 15.6,
       "temp_aktuell_zeit": "23:00 Uhr",
       "temp_tage": [
-        {
-          "tag": "2026-05-21",
-          "tmax": 22.0,
-          "tmean": 17.0
-        },
         {
           "tag": "2026-05-22",
           "tmax": 26.2,
@@ -49722,6 +49717,11 @@
           "tag": "2026-07-01",
           "tmax": 25.9,
           "tmean": 21.7
+        },
+        {
+          "tag": "2026-07-02",
+          "tmax": 26.2,
+          "tmean": 20.3
         }
       ],
       "temp_heute_max": null,
@@ -49736,14 +49736,10 @@
         },
         {
           "jahr": 2026,
-          "anzahl": 25
+          "anzahl": 26
         }
       ],
       "regen_tage": [
-        {
-          "tag": "2026-05-21",
-          "regen_30d": 40.4
-        },
         {
           "tag": "2026-05-22",
           "regen_30d": 40.4
@@ -49907,19 +49903,18 @@
         {
           "tag": "2026-07-01",
           "regen_30d": 47.3
+        },
+        {
+          "tag": "2026-07-02",
+          "regen_30d": 36.2
         }
       ],
-      "regen_30d_aktuell": 47.3
+      "regen_30d_aktuell": 36.2
     },
     "burbach": {
-      "temp_aktuell_stunde": 16.3,
+      "temp_aktuell_stunde": 17.9,
       "temp_aktuell_zeit": "23:00 Uhr",
       "temp_tage": [
-        {
-          "tag": "2026-05-21",
-          "tmax": 24.2,
-          "tmean": 17.5
-        },
         {
           "tag": "2026-05-22",
           "tmax": 27.8,
@@ -50124,6 +50119,11 @@
           "tag": "2026-07-01",
           "tmax": 27.7,
           "tmean": 23.0
+        },
+        {
+          "tag": "2026-07-02",
+          "tmax": 28.3,
+          "tmean": 21.4
         }
       ],
       "temp_heute_max": null,
@@ -50138,14 +50138,10 @@
         },
         {
           "jahr": 2026,
-          "anzahl": 30
+          "anzahl": 31
         }
       ],
       "regen_tage": [
-        {
-          "tag": "2026-05-21",
-          "regen_30d": 43.6
-        },
         {
           "tag": "2026-05-22",
           "regen_30d": 43.6
@@ -50309,19 +50305,18 @@
         {
           "tag": "2026-07-01",
           "regen_30d": 56.9
+        },
+        {
+          "tag": "2026-07-02",
+          "regen_30d": 46.7
         }
       ],
-      "regen_30d_aktuell": 56.9
+      "regen_30d_aktuell": 46.7
     },
     "berus": {
-      "temp_aktuell_stunde": 18.4,
+      "temp_aktuell_stunde": 17.2,
       "temp_aktuell_zeit": "23:00 Uhr",
       "temp_tage": [
-        {
-          "tag": "2026-05-21",
-          "tmax": 21.6,
-          "tmean": 17.0
-        },
         {
           "tag": "2026-05-22",
           "tmax": 25.7,
@@ -50526,6 +50521,11 @@
           "tag": "2026-07-01",
           "tmax": 25.6,
           "tmean": 21.5
+        },
+        {
+          "tag": "2026-07-02",
+          "tmax": 26.5,
+          "tmean": 21.0
         }
       ],
       "temp_heute_max": null,
@@ -50540,14 +50540,10 @@
         },
         {
           "jahr": 2026,
-          "anzahl": 25
+          "anzahl": 26
         }
       ],
       "regen_tage": [
-        {
-          "tag": "2026-05-21",
-          "regen_30d": 48.6
-        },
         {
           "tag": "2026-05-22",
           "regen_30d": 48.6
@@ -50711,21 +50707,20 @@
         {
           "tag": "2026-07-01",
           "regen_30d": 61.2
+        },
+        {
+          "tag": "2026-07-02",
+          "regen_30d": 48.2
         }
       ],
-      "regen_30d_aktuell": 61.2
+      "regen_30d_aktuell": 48.2
     },
     "homburg": {},
     "merzig": {},
     "neunkirchen": {
-      "temp_aktuell_stunde": 14.6,
+      "temp_aktuell_stunde": 16.8,
       "temp_aktuell_zeit": "23:00 Uhr",
       "temp_tage": [
-        {
-          "tag": "2026-05-21",
-          "tmax": 23.5,
-          "tmean": 17.1
-        },
         {
           "tag": "2026-05-22",
           "tmax": 27.9,
@@ -50930,6 +50925,11 @@
           "tag": "2026-07-01",
           "tmax": 28.0,
           "tmean": 22.5
+        },
+        {
+          "tag": "2026-07-02",
+          "tmax": 27.4,
+          "tmean": 20.8
         }
       ],
       "temp_heute_max": null,
@@ -50944,14 +50944,10 @@
         },
         {
           "jahr": 2026,
-          "anzahl": 28
+          "anzahl": 29
         }
       ],
       "regen_tage": [
-        {
-          "tag": "2026-05-21",
-          "regen_30d": 34.8
-        },
         {
           "tag": "2026-05-22",
           "regen_30d": 34.8
@@ -51115,20 +51111,19 @@
         {
           "tag": "2026-07-01",
           "regen_30d": 77.9
+        },
+        {
+          "tag": "2026-07-02",
+          "regen_30d": 55.2
         }
       ],
-      "regen_30d_aktuell": 77.9
+      "regen_30d_aktuell": 55.2
     },
     "nohfelden": {},
     "perl": {
-      "temp_aktuell_stunde": 13.1,
+      "temp_aktuell_stunde": 15.7,
       "temp_aktuell_zeit": "23:00 Uhr",
       "temp_tage": [
-        {
-          "tag": "2026-05-21",
-          "tmax": 22.4,
-          "tmean": 16.3
-        },
         {
           "tag": "2026-05-22",
           "tmax": 27.5,
@@ -51333,6 +51328,11 @@
           "tag": "2026-07-01",
           "tmax": 28.0,
           "tmean": 21.6
+        },
+        {
+          "tag": "2026-07-02",
+          "tmax": 27.5,
+          "tmean": 20.2
         }
       ],
       "temp_heute_max": null,
@@ -51347,14 +51347,10 @@
         },
         {
           "jahr": 2026,
-          "anzahl": 27
+          "anzahl": 28
         }
       ],
       "regen_tage": [
-        {
-          "tag": "2026-05-21",
-          "regen_30d": 40.0
-        },
         {
           "tag": "2026-05-22",
           "regen_30d": 40.0
@@ -51518,20 +51514,19 @@
         {
           "tag": "2026-07-01",
           "regen_30d": 40.4
+        },
+        {
+          "tag": "2026-07-02",
+          "regen_30d": 29.7
         }
       ],
-      "regen_30d_aktuell": 40.4
+      "regen_30d_aktuell": 29.7
     },
     "schmelz": {},
     "tholey": {
-      "temp_aktuell_stunde": 19.0,
+      "temp_aktuell_stunde": 16.9,
       "temp_aktuell_zeit": "23:00 Uhr",
       "temp_tage": [
-        {
-          "tag": "2026-05-21",
-          "tmax": 21.4,
-          "tmean": 16.6
-        },
         {
           "tag": "2026-05-22",
           "tmax": 25.0,
@@ -51736,6 +51731,11 @@
           "tag": "2026-07-01",
           "tmax": 25.8,
           "tmean": 21.5
+        },
+        {
+          "tag": "2026-07-02",
+          "tmax": 25.9,
+          "tmean": 20.1
         }
       ],
       "temp_heute_max": null,
@@ -51750,14 +51750,10 @@
         },
         {
           "jahr": 2026,
-          "anzahl": 25
+          "anzahl": 26
         }
       ],
       "regen_tage": [
-        {
-          "tag": "2026-05-21",
-          "regen_30d": 41.1
-        },
         {
           "tag": "2026-05-22",
           "regen_30d": 41.1
@@ -51921,19 +51917,18 @@
         {
           "tag": "2026-07-01",
           "regen_30d": 75.4
+        },
+        {
+          "tag": "2026-07-02",
+          "regen_30d": 66.5
         }
       ],
-      "regen_30d_aktuell": 75.4
+      "regen_30d_aktuell": 66.5
     },
     "weiskirchen": {
-      "temp_aktuell_stunde": 18.5,
+      "temp_aktuell_stunde": 15.6,
       "temp_aktuell_zeit": "23:00 Uhr",
       "temp_tage": [
-        {
-          "tag": "2026-05-21",
-          "tmax": 22.8,
-          "tmean": 16.6
-        },
         {
           "tag": "2026-05-22",
           "tmax": 27.8,
@@ -52138,6 +52133,11 @@
           "tag": "2026-07-01",
           "tmax": 27.3,
           "tmean": 21.6
+        },
+        {
+          "tag": "2026-07-02",
+          "tmax": 26.6,
+          "tmean": 19.9
         }
       ],
       "temp_heute_max": null,
@@ -52152,14 +52152,10 @@
         },
         {
           "jahr": 2026,
-          "anzahl": 25
+          "anzahl": 26
         }
       ],
       "regen_tage": [
-        {
-          "tag": "2026-05-21",
-          "regen_30d": 63.2
-        },
         {
           "tag": "2026-05-22",
           "regen_30d": 63.2
@@ -52323,9 +52319,13 @@
         {
           "tag": "2026-07-01",
           "regen_30d": 65.5
+        },
+        {
+          "tag": "2026-07-02",
+          "regen_30d": 51.3
         }
       ],
-      "regen_30d_aktuell": 65.5
+      "regen_30d_aktuell": 51.3
     }
   }
 }
