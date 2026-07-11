@@ -1,6 +1,6 @@
 {
   "meta": {
-    "erstellt_am": "2026-07-10T21:43:14Z",
+    "erstellt_am": "2026-07-11T06:29:12Z",
     "quelle": "Deutscher Wetterdienst (DWD) Open Data",
     "url": "https://opendata.dwd.de/",
     "stationen": {
@@ -49514,11 +49514,6 @@
       "temp_aktuell_zeit": "23:00 Uhr",
       "temp_tage": [
         {
-          "tag": "2026-05-29",
-          "tmax": 29.0,
-          "tmean": 21.9
-        },
-        {
           "tag": "2026-05-30",
           "tmax": 28.0,
           "tmean": 22.7
@@ -49737,10 +49732,6 @@
       ],
       "regen_tage": [
         {
-          "tag": "2026-05-29",
-          "regen_30d": 40.4
-        },
-        {
           "tag": "2026-05-30",
           "regen_30d": 40.4
         },
@@ -49911,11 +49902,6 @@
       "temp_aktuell_stunde": 20.3,
       "temp_aktuell_zeit": "23:00 Uhr",
       "temp_tage": [
-        {
-          "tag": "2026-05-29",
-          "tmax": 31.3,
-          "tmean": 22.4
-        },
         {
           "tag": "2026-05-30",
           "tmax": 30.6,
@@ -50135,10 +50121,6 @@
       ],
       "regen_tage": [
         {
-          "tag": "2026-05-29",
-          "regen_30d": 43.6
-        },
-        {
           "tag": "2026-05-30",
           "regen_30d": 43.6
         },
@@ -50309,11 +50291,6 @@
       "temp_aktuell_stunde": 20.8,
       "temp_aktuell_zeit": "23:00 Uhr",
       "temp_tage": [
-        {
-          "tag": "2026-05-29",
-          "tmax": 29.6,
-          "tmean": 22.8
-        },
         {
           "tag": "2026-05-30",
           "tmax": 28.2,
@@ -50533,10 +50510,6 @@
       ],
       "regen_tage": [
         {
-          "tag": "2026-05-29",
-          "regen_30d": 48.6
-        },
-        {
           "tag": "2026-05-30",
           "regen_30d": 48.6
         },
@@ -50709,11 +50682,6 @@
       "temp_aktuell_stunde": 17.3,
       "temp_aktuell_zeit": "23:00 Uhr",
       "temp_tage": [
-        {
-          "tag": "2026-05-29",
-          "tmax": 31.4,
-          "tmean": 21.3
-        },
         {
           "tag": "2026-05-30",
           "tmax": 31.0,
@@ -50933,10 +50901,6 @@
       ],
       "regen_tage": [
         {
-          "tag": "2026-05-29",
-          "regen_30d": 34.8
-        },
-        {
           "tag": "2026-05-30",
           "regen_30d": 34.8
         },
@@ -51108,11 +51072,6 @@
       "temp_aktuell_stunde": 17.7,
       "temp_aktuell_zeit": "23:00 Uhr",
       "temp_tage": [
-        {
-          "tag": "2026-05-29",
-          "tmax": 31.2,
-          "tmean": 21.4
-        },
         {
           "tag": "2026-05-30",
           "tmax": 28.7,
@@ -51332,10 +51291,6 @@
       ],
       "regen_tage": [
         {
-          "tag": "2026-05-29",
-          "regen_30d": 40.0
-        },
-        {
           "tag": "2026-05-30",
           "regen_30d": 40.0
         },
@@ -51507,11 +51462,6 @@
       "temp_aktuell_stunde": 20.0,
       "temp_aktuell_zeit": "23:00 Uhr",
       "temp_tage": [
-        {
-          "tag": "2026-05-29",
-          "tmax": 28.9,
-          "tmean": 23.0
-        },
         {
           "tag": "2026-05-30",
           "tmax": 27.7,
@@ -51731,10 +51681,6 @@
       ],
       "regen_tage": [
         {
-          "tag": "2026-05-29",
-          "regen_30d": 41.1
-        },
-        {
           "tag": "2026-05-30",
           "regen_30d": 41.1
         },
@@ -51905,11 +51851,6 @@
       "temp_aktuell_stunde": 20.3,
       "temp_aktuell_zeit": "23:00 Uhr",
       "temp_tage": [
-        {
-          "tag": "2026-05-29",
-          "tmax": 31.1,
-          "tmean": 23.4
-        },
         {
           "tag": "2026-05-30",
           "tmax": 29.1,
@@ -52128,10 +52069,6 @@
         }
       ],
       "regen_tage": [
-        {
-          "tag": "2026-05-29",
-          "regen_30d": 63.2
-        },
         {
           "tag": "2026-05-30",
           "regen_30d": 63.2
