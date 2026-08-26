@@ -1,6 +1,6 @@
 {
   "meta": {
-    "erstellt_am": "2026-08-26T08:58:34Z",
+    "erstellt_am": "2026-08-26T09:53:51Z",
     "quelle": "Deutscher Wetterdienst (DWD) Open Data",
     "url": "https://opendata.dwd.de/",
     "stationen": {
@@ -49890,9 +49890,17 @@
         {
           "tag": "2026-08-23",
           "regen_30d": 18.4
+        },
+        {
+          "tag": "2026-08-24",
+          "regen_30d": 20.3
+        },
+        {
+          "tag": "2026-08-25",
+          "regen_30d": 25.8
         }
       ],
-      "regen_30d_aktuell": 18.4
+      "regen_30d_aktuell": 25.8
     },
     "burbach": {
       "temp_aktuell_stunde": 15.1,
@@ -50275,9 +50283,17 @@
         {
           "tag": "2026-08-23",
           "regen_30d": 10.1
+        },
+        {
+          "tag": "2026-08-24",
+          "regen_30d": 13.2
+        },
+        {
+          "tag": "2026-08-25",
+          "regen_30d": 19.9
         }
       ],
-      "regen_30d_aktuell": 10.1
+      "regen_30d_aktuell": 19.9
     },
     "berus": {
       "temp_aktuell_stunde": 13.4,
@@ -50660,9 +50676,17 @@
         {
           "tag": "2026-08-23",
           "regen_30d": 5.5
+        },
+        {
+          "tag": "2026-08-24",
+          "regen_30d": 8.6
+        },
+        {
+          "tag": "2026-08-25",
+          "regen_30d": 16.9
         }
       ],
-      "regen_30d_aktuell": 5.5
+      "regen_30d_aktuell": 16.9
     },
     "homburg": {},
     "merzig": {},
@@ -51047,9 +51071,17 @@
         {
           "tag": "2026-08-23",
           "regen_30d": 14.8
+        },
+        {
+          "tag": "2026-08-24",
+          "regen_30d": 17.9
+        },
+        {
+          "tag": "2026-08-25",
+          "regen_30d": 22.8
         }
       ],
-      "regen_30d_aktuell": 14.8
+      "regen_30d_aktuell": 22.8
     },
     "nohfelden": {},
     "perl": {
@@ -51433,9 +51465,17 @@
         {
           "tag": "2026-08-23",
           "regen_30d": 42.7
+        },
+        {
+          "tag": "2026-08-24",
+          "regen_30d": 42.7
+        },
+        {
+          "tag": "2026-08-25",
+          "regen_30d": 50.9
         }
       ],
-      "regen_30d_aktuell": 42.7
+      "regen_30d_aktuell": 50.9
     },
     "schmelz": {},
     "tholey": {
@@ -51819,9 +51859,17 @@
         {
           "tag": "2026-08-23",
           "regen_30d": 14.1
+        },
+        {
+          "tag": "2026-08-24",
+          "regen_30d": 14.2
+        },
+        {
+          "tag": "2026-08-25",
+          "regen_30d": 19.8
         }
       ],
-      "regen_30d_aktuell": 14.1
+      "regen_30d_aktuell": 19.8
     },
     "weiskirchen": {
       "temp_aktuell_stunde": 12.9,
@@ -52204,9 +52252,17 @@
         {
           "tag": "2026-08-23",
           "regen_30d": 29.4
+        },
+        {
+          "tag": "2026-08-24",
+          "regen_30d": 29.5
+        },
+        {
+          "tag": "2026-08-25",
+          "regen_30d": 36.2
         }
       ],
-      "regen_30d_aktuell": 29.4
+      "regen_30d_aktuell": 36.2
     }
   }
 }
