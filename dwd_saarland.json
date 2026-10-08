@@ -1,6 +1,6 @@
 {
   "meta": {
-    "erstellt_am": "2026-10-08T08:52:57Z",
+    "erstellt_am": "2026-10-08T16:26:45Z",
     "quelle": "Deutscher Wetterdienst (DWD) Open Data",
     "url": "https://opendata.dwd.de/",
     "stationen": {
@@ -49899,9 +49899,13 @@
         {
           "tag": "2026-10-06",
           "regen_30d": 6.0
+        },
+        {
+          "tag": "2026-10-07",
+          "regen_30d": 10.4
         }
       ],
-      "regen_30d_aktuell": 6.0
+      "regen_30d_aktuell": 10.4
     },
     "burbach": {
       "temp_aktuell_stunde": 16.8,
@@ -50293,9 +50297,13 @@
         {
           "tag": "2026-10-06",
           "regen_30d": 3.8
+        },
+        {
+          "tag": "2026-10-07",
+          "regen_30d": 7.4
         }
       ],
-      "regen_30d_aktuell": 3.8
+      "regen_30d_aktuell": 7.4
     },
     "berus": {
       "temp_aktuell_stunde": 15.3,
@@ -50687,9 +50695,13 @@
         {
           "tag": "2026-10-06",
           "regen_30d": 7.1
+        },
+        {
+          "tag": "2026-10-07",
+          "regen_30d": 14.2
         }
       ],
-      "regen_30d_aktuell": 7.1
+      "regen_30d_aktuell": 14.2
     },
     "homburg": {},
     "merzig": {},
@@ -51083,9 +51095,13 @@
         {
           "tag": "2026-10-06",
           "regen_30d": 6.3
+        },
+        {
+          "tag": "2026-10-07",
+          "regen_30d": 13.8
         }
       ],
-      "regen_30d_aktuell": 6.3
+      "regen_30d_aktuell": 13.8
     },
     "nohfelden": {},
     "perl": {
@@ -51478,9 +51494,13 @@
         {
           "tag": "2026-10-06",
           "regen_30d": 11.0
+        },
+        {
+          "tag": "2026-10-07",
+          "regen_30d": 27.7
         }
       ],
-      "regen_30d_aktuell": 11.0
+      "regen_30d_aktuell": 27.7
     },
     "schmelz": {},
     "tholey": {
@@ -51873,9 +51893,13 @@
         {
           "tag": "2026-10-06",
           "regen_30d": 7.3
+        },
+        {
+          "tag": "2026-10-07",
+          "regen_30d": 18.4
         }
       ],
-      "regen_30d_aktuell": 7.3
+      "regen_30d_aktuell": 18.4
     },
     "weiskirchen": {
       "temp_aktuell_stunde": 14.6,
@@ -52267,9 +52291,13 @@
         {
           "tag": "2026-10-06",
           "regen_30d": 6.9
+        },
+        {
+          "tag": "2026-10-07",
+          "regen_30d": 17.3
         }
       ],
-      "regen_30d_aktuell": 6.9
+      "regen_30d_aktuell": 17.3
     }
   }
 }
