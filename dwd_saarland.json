@@ -1,6 +1,6 @@
 {
   "meta": {
-    "erstellt_am": "2026-10-11T01:49:25Z",
+    "erstellt_am": "2026-10-11T08:43:34Z",
     "quelle": "Deutscher Wetterdienst (DWD) Open Data",
     "url": "https://opendata.dwd.de/",
     "stationen": {
@@ -49510,7 +49510,7 @@
   },
   "aktuell": {
     "ensheim": {
-      "temp_aktuell_stunde": 9.8,
+      "temp_aktuell_stunde": 9.3,
       "temp_aktuell_zeit": "23:00 Uhr",
       "temp_tage": [
         {
@@ -49717,6 +49717,11 @@
           "tag": "2026-10-09",
           "tmax": 10.8,
           "tmean": 8.2
+        },
+        {
+          "tag": "2026-10-10",
+          "tmax": 14.9,
+          "tmean": 11.4
         }
       ],
       "temp_heute_max": null,
@@ -49899,7 +49904,7 @@
       "regen_30d_aktuell": 14.2
     },
     "burbach": {
-      "temp_aktuell_stunde": 11.1,
+      "temp_aktuell_stunde": 10.3,
       "temp_aktuell_zeit": "23:00 Uhr",
       "temp_tage": [
         {
@@ -50106,6 +50111,11 @@
           "tag": "2026-10-09",
           "tmax": 12.1,
           "tmean": 9.3
+        },
+        {
+          "tag": "2026-10-10",
+          "tmax": 15.6,
+          "tmean": 12.5
         }
       ],
       "temp_heute_max": null,
@@ -50288,7 +50298,7 @@
       "regen_30d_aktuell": 13.0
     },
     "berus": {
-      "temp_aktuell_stunde": 10.3,
+      "temp_aktuell_stunde": 8.3,
       "temp_aktuell_zeit": "23:00 Uhr",
       "temp_tage": [
         {
@@ -50495,6 +50505,11 @@
           "tag": "2026-10-09",
           "tmax": 10.3,
           "tmean": 8.2
+        },
+        {
+          "tag": "2026-10-10",
+          "tmax": 13.5,
+          "tmean": 11.0
         }
       ],
       "temp_heute_max": null,
@@ -50679,7 +50694,7 @@
     "homburg": {},
     "merzig": {},
     "neunkirchen": {
-      "temp_aktuell_stunde": 10.8,
+      "temp_aktuell_stunde": 10.2,
       "temp_aktuell_zeit": "23:00 Uhr",
       "temp_tage": [
         {
@@ -50886,6 +50901,11 @@
           "tag": "2026-10-09",
           "tmax": 11.6,
           "tmean": 8.3
+        },
+        {
+          "tag": "2026-10-10",
+          "tmax": 15.8,
+          "tmean": 12.3
         }
       ],
       "temp_heute_max": null,
@@ -51069,7 +51089,7 @@
     },
     "nohfelden": {},
     "perl": {
-      "temp_aktuell_stunde": 11.9,
+      "temp_aktuell_stunde": 11.2,
       "temp_aktuell_zeit": "23:00 Uhr",
       "temp_tage": [
         {
@@ -51276,6 +51296,11 @@
           "tag": "2026-10-09",
           "tmax": 11.9,
           "tmean": 9.0
+        },
+        {
+          "tag": "2026-10-10",
+          "tmax": 16.2,
+          "tmean": 12.8
         }
       ],
       "temp_heute_max": null,
@@ -51459,7 +51484,7 @@
     },
     "schmelz": {},
     "tholey": {
-      "temp_aktuell_stunde": 9.8,
+      "temp_aktuell_stunde": 9.0,
       "temp_aktuell_zeit": "23:00 Uhr",
       "temp_tage": [
         {
@@ -51666,6 +51691,11 @@
           "tag": "2026-10-09",
           "tmax": 9.8,
           "tmean": 7.5
+        },
+        {
+          "tag": "2026-10-10",
+          "tmax": 13.6,
+          "tmean": 10.9
         }
       ],
       "temp_heute_max": null,
@@ -51848,7 +51878,7 @@
       "regen_30d_aktuell": 28.7
     },
     "weiskirchen": {
-      "temp_aktuell_stunde": 10.0,
+      "temp_aktuell_stunde": 8.8,
       "temp_aktuell_zeit": "23:00 Uhr",
       "temp_tage": [
         {
@@ -52055,6 +52085,11 @@
           "tag": "2026-10-09",
           "tmax": 10.0,
           "tmean": 7.6
+        },
+        {
+          "tag": "2026-10-10",
+          "tmax": 13.5,
+          "tmean": 10.9
         }
       ],
       "temp_heute_max": null,
