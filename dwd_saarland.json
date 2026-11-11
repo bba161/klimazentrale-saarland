@@ -1,6 +1,6 @@
 {
   "meta": {
-    "erstellt_am": "2026-11-11T06:01:46Z",
+    "erstellt_am": "2026-11-11T14:08:05Z",
     "quelle": "Deutscher Wetterdienst (DWD) Open Data",
     "url": "https://opendata.dwd.de/",
     "stationen": {
@@ -49510,7 +49510,7 @@
   },
   "aktuell": {
     "ensheim": {
-      "temp_aktuell_stunde": 5.5,
+      "temp_aktuell_stunde": 6.1,
       "temp_aktuell_zeit": "23:00 Uhr",
       "temp_tage": [
         {
@@ -49717,6 +49717,11 @@
           "tag": "2026-11-09",
           "tmax": 6.2,
           "tmean": 4.5
+        },
+        {
+          "tag": "2026-11-10",
+          "tmax": 6.3,
+          "tmean": 5.8
         }
       ],
       "temp_heute_max": null,
@@ -49894,12 +49899,16 @@
         {
           "tag": "2026-11-09",
           "regen_30d": 65.7
+        },
+        {
+          "tag": "2026-11-10",
+          "regen_30d": 75.4
         }
       ],
-      "regen_30d_aktuell": 65.7
+      "regen_30d_aktuell": 75.4
     },
     "burbach": {
-      "temp_aktuell_stunde": 7.0,
+      "temp_aktuell_stunde": 7.2,
       "temp_aktuell_zeit": "23:00 Uhr",
       "temp_tage": [
         {
@@ -50106,6 +50115,11 @@
           "tag": "2026-11-09",
           "tmax": 7.7,
           "tmean": 5.6
+        },
+        {
+          "tag": "2026-11-10",
+          "tmax": 7.8,
+          "tmean": 7.2
         }
       ],
       "temp_heute_max": null,
@@ -50283,9 +50297,13 @@
         {
           "tag": "2026-11-09",
           "regen_30d": 63.4
+        },
+        {
+          "tag": "2026-11-10",
+          "regen_30d": 70.1
         }
       ],
-      "regen_30d_aktuell": 63.4
+      "regen_30d_aktuell": 70.1
     },
     "berus": {
       "temp_aktuell_stunde": 5.5,
@@ -50495,6 +50513,11 @@
           "tag": "2026-11-09",
           "tmax": 5.8,
           "tmean": 4.5
+        },
+        {
+          "tag": "2026-11-10",
+          "tmax": 6.2,
+          "tmean": 5.4
         }
       ],
       "temp_heute_max": null,
@@ -50672,14 +50695,18 @@
         {
           "tag": "2026-11-09",
           "regen_30d": 70.6
+        },
+        {
+          "tag": "2026-11-10",
+          "regen_30d": 73.5
         }
       ],
-      "regen_30d_aktuell": 70.6
+      "regen_30d_aktuell": 73.5
     },
     "homburg": {},
     "merzig": {},
     "neunkirchen": {
-      "temp_aktuell_stunde": 6.5,
+      "temp_aktuell_stunde": 6.4,
       "temp_aktuell_zeit": "23:00 Uhr",
       "temp_tage": [
         {
@@ -50886,6 +50913,11 @@
           "tag": "2026-11-09",
           "tmax": 7.4,
           "tmean": 5.3
+        },
+        {
+          "tag": "2026-11-10",
+          "tmax": 8.5,
+          "tmean": 6.7
         }
       ],
       "temp_heute_max": null,
@@ -51063,13 +51095,17 @@
         {
           "tag": "2026-11-09",
           "regen_30d": 72.0
+        },
+        {
+          "tag": "2026-11-10",
+          "regen_30d": 80.7
         }
       ],
-      "regen_30d_aktuell": 72.0
+      "regen_30d_aktuell": 80.7
     },
     "nohfelden": {},
     "perl": {
-      "temp_aktuell_stunde": 7.7,
+      "temp_aktuell_stunde": 7.3,
       "temp_aktuell_zeit": "23:00 Uhr",
       "temp_tage": [
         {
@@ -51276,6 +51312,11 @@
           "tag": "2026-11-09",
           "tmax": 8.1,
           "tmean": 5.6
+        },
+        {
+          "tag": "2026-11-10",
+          "tmax": 9.6,
+          "tmean": 7.7
         }
       ],
       "temp_heute_max": null,
@@ -51453,13 +51494,17 @@
         {
           "tag": "2026-11-09",
           "regen_30d": 61.2
+        },
+        {
+          "tag": "2026-11-10",
+          "regen_30d": 65.7
         }
       ],
-      "regen_30d_aktuell": 61.2
+      "regen_30d_aktuell": 65.7
     },
     "schmelz": {},
     "tholey": {
-      "temp_aktuell_stunde": 5.2,
+      "temp_aktuell_stunde": 5.1,
       "temp_aktuell_zeit": "23:00 Uhr",
       "temp_tage": [
         {
@@ -51666,6 +51711,11 @@
           "tag": "2026-11-09",
           "tmax": 6.2,
           "tmean": 5.0
+        },
+        {
+          "tag": "2026-11-10",
+          "tmax": 6.3,
+          "tmean": 5.2
         }
       ],
       "temp_heute_max": null,
@@ -51843,12 +51893,16 @@
         {
           "tag": "2026-11-09",
           "regen_30d": 88.4
+        },
+        {
+          "tag": "2026-11-10",
+          "regen_30d": 93.8
         }
       ],
-      "regen_30d_aktuell": 88.4
+      "regen_30d_aktuell": 93.8
     },
     "weiskirchen": {
-      "temp_aktuell_stunde": 6.0,
+      "temp_aktuell_stunde": 5.8,
       "temp_aktuell_zeit": "23:00 Uhr",
       "temp_tage": [
         {
@@ -52055,6 +52109,11 @@
           "tag": "2026-11-09",
           "tmax": 7.2,
           "tmean": 5.6
+        },
+        {
+          "tag": "2026-11-10",
+          "tmax": 7.9,
+          "tmean": 5.9
         }
       ],
       "temp_heute_max": null,
@@ -52232,9 +52291,13 @@
         {
           "tag": "2026-11-09",
           "regen_30d": 126.6
+        },
+        {
+          "tag": "2026-11-10",
+          "regen_30d": 132.6
         }
       ],
-      "regen_30d_aktuell": 126.6
+      "regen_30d_aktuell": 132.6
     }
   }
 }
